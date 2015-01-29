@@ -1,0 +1,5 @@
+# Node
+iaas::profile::base::ipaddress: 192.168.2.1
+
+# Proxy
+iaas::role::endpoint::haproxy_ip: 192.168.2.1

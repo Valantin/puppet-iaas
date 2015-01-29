@@ -1,0 +1,49 @@
+# Node
+iaas::profile::base::netmask: 255.255.192.0
+iaas::profile::base::gateway: 192.168.0.1
+iaas::profile::base::dns_servers: [192.168.0.1, 8.8.8.8, 8.8.4.4]
+iaas::profile::base::dns_searchdomain: iaas
+iaas::profile::base::ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAo/JkbGO6R7g1ZxARi0xWVM7FOfN02snRAcIO6vT9M7xMUkWVLgD+hM/o91lk+UFiYdql0CATobpFWncRL36KaUqsbw9/1BlI40wg296XHXSSnxhxZ4L7ytf6G1tyN319HXlI2kh9vAf/fy++yDvkH8dI3k1oLoW+mZPET6Pff04/6AXXrRlS5mhmGv9irGwiDHtVKpj6lU8DN/UtOrv1tiQ0pgwEJq05fLGoQfgPNaBCnW2z4Ubpn2gyMcMBMpSwo4hCqJePd349e4bLmFcT+gXYg7Mnup1DoTDlowFFN56wpxQbdp96IxWzU+jYPaIAuRo+BJzCyOS8qBv0Z4RZrgop0qp2JYiVwmViO6TZhIDz6loQJXUOIleQmNgTbiZx8Bwv5GY2jMYoVwlBp7yy5bRjxfbFsJ0vU7TVzNAG7oEJy/74HmHmWzRQlSlQjesr8gRbm9zgR8wqc/L107UOWFg7Cgh8ZNjKuADbXqYuda1Y9m2upcfS26UPz5l5PW5uFRMHZSi8pb1XV6/0Z8H8vwsh37Ur6aLi/5jruRmKhdlsNrB1IiDicBsPW3yg7HHSIdPU4oBNPC77yDCT3l4CKr4el81RrZt7FbJPfY+Ig9Q5O+05f6I8+ZOlJGyZ/Qfyl2aVm1HnlJKuBqPxeic8tMng/9B5N7uZL6Y3k5jFU8c= contact@harmony-hosting.com
+iaas::profile::base::ntp_servers: [puppet]
+
+# Endpoints
+iaas::role::endpoint::haproxy_port: [8140]
+
+# Controller
+iaas::role::controller::servers: [192.168.3.1, 192.168.3.2, 192.168.3.3]
+iaas::role::controller::server_hosts: [controller-1, controller-2, controller-3]
+
+iaas::role::controller::galera_master: controller-1.iaas
+iaas::role::controller::galera_password: iaas
+galera::status::status_allow: localhost
+
+iaas::role::controller::rabbitmq_user: openstack
+iaas::role::controller::rabbitmq_password: iaas
+iaas::role::controller::rabbitmq_erlang: GWFFDKEXVWEMGMFLSFQX
+
+# Ceph
+iaas::role::storage::cluster_vlan: 8
+iaas::role::storage::cluster_netmask: 255.255.252.0
+
+ceph::profile::params:release: 'firefly'
+ceph::profile::params::fsid: '8bd6398b-65a2-4254-bb00-1ff2468d2806'
+ceph::profile::params:authentication_type: 'cephx'
+ceph::profile::params:mon_initial_members: ''
+ceph::profile::params::mon_host: '192.168.1.1:6789, 192.168.1.2:6789, 192.168.1.3:6789'
+ceph::profile::params::osd_pool_default_pg_num: 128
+ceph::profile::params::osd_pool_default_pgp_num: 128
+ceph::profile::params::osd_pool_default_size: 3
+ceph::profile::params::osd_pool_default_min_size: 2
+ceph::profile::params::cluster_network: '172.16.64.0/22'
+ceph::profile::params::public_network: '192.168.0.0/18'
+
+ceph::profile::params::mon_key: 'AQCdC8FU+HpKKRAAdjPWy4epdofGDpJQJi9iiA=='
+ceph::profile::params::admin_key: 'AQAZksZUEByAJhAA4EeT6P7RBy94sThGb2cP6Q=='
+ceph::profile::params::admin_key_mode: '0600'
+ceph::profile::params::bootstrap_osd_key: 'AQAhksZU+JhpIxAACevduqas0p+fRJDhGLg9lw=='
+ceph::profile::params::bootstrap_mds_key: 'AQApksZUIJhXJxAAEHVW/dbL1OeLA7Om++zdVw=='
+
+ceph::keys::args:
+  client.app:
+    secret: AQCdC8FU+HpKKRAAdjPWy4epdofGDpJQJi9iiA==
+    cap_mon: allow r

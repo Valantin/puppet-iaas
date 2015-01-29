@@ -1,0 +1,20 @@
+# Node
+iaas::profile::base::ipaddress: 192.168.1.2
+
+# Ceph
+iaas::role::storage::cluster_ipaddress: 172.16.64.2
+iaas::role::storage::osd_disk: /dev/sda
+iaas::role::storage::osd_partition: 4
+iaas::role::storage::osd_uuid: 33c17404-ecbc-420c-a747-0c32b0450711
+
+ceph::profile::params::osds:
+  '/dev/sda4':
+    journal:
+
+ceph::keys::args:
+  client.app:
+    secret: AQCdC8FU+HpKKRAAdjPWy4epdofGDpJQJi9iiA==
+    cap_mon: allow r
+    inject: true
+    inject_as_id: mon.
+    inject_keyring: /var/lib/ceph/mon/ceph-%{::hostname}/keyring
