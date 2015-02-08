@@ -18,11 +18,13 @@ mod 'camptocamp-kmod',
     :git => 'https://github.com/camptocamp/puppet-kmod.git'
 mod 'adrien-network',
     :git => 'https://github.com/puppet-community/puppet-network.git'
+mod 'puppetlabs-apt',
+    :git => 'https://github.com/puppetlabs/puppetlabs-apt.git'
 
 # Role Controller
-mod 'puppetlabs-mysql', # This is only required because of https://github.com/michaeltchapman/puppet-galera/pull/22
+mod 'puppetlabs-mysql',
     :git => 'https://github.com/puppetlabs/puppetlabs-mysql.git',
-    :ref => '2.2.0'
+    :ref => '2.3.0' # This is only required because of https://github.com/michaeltchapman/puppet-galera/pull/22
 mod 'michaeltchapman-galera',
     :git => 'https://github.com/michaeltchapman/puppet-galera.git'
 mod 'garethr-erlang', # Required by rabbitmq
@@ -37,3 +39,52 @@ mod 'stackforge-ceph',
 # Role Endpoint
 mod 'puppetlabs-haproxy',
     :git => 'https://github.com/puppetlabs/puppetlabs-haproxy.git'
+
+## The core OpenStack modules
+mod "keystone",
+  :git => "git://github.com/stackforge/puppet-keystone",
+  :ref => "master"
+
+mod "swift",
+  :git => "git://github.com/stackforge/puppet-swift",
+  :ref => "master"
+
+mod "glance",
+  :git => "git://github.com/stackforge/puppet-glance",
+  :ref => "master"
+
+mod "cinder",
+  :git => "git://github.com/stackforge/puppet-cinder",
+  :ref => "master"
+
+mod "neutron",
+  :git => "git://github.com/stackforge/puppet-neutron",
+  :ref => "master"
+
+mod "nova",
+  :git => "git://github.com/stackforge/puppet-nova",
+  :ref => "master"
+
+mod "heat",
+  :git => "git://github.com/stackforge/puppet-heat",
+  :ref => "master"
+
+mod "ceilometer",
+  :git => "git://github.com/stackforge/puppet-ceilometer",
+  :ref => "master"
+
+mod "horizon",
+  :git => "git://github.com/stackforge/puppet-horizon",
+  :ref => "master"
+
+mod "openstacklib",
+  :git => "git://github.com/stackforge/puppet-openstacklib",
+  :ref => "master"
+
+mod "tempest",
+  :git => "git://github.com/stackforge/puppet-tempest",
+  :ref => "master"
+
+mod "vswitch",
+  :git => "git://github.com/stackforge/puppet-vswitch",
+  :ref => "master"

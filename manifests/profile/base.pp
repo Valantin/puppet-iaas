@@ -7,6 +7,16 @@ class iaas::profile::base (
   $ssh_public_key,
   $ntp_servers
 ) {
+  # Apt repo
+  apt::source { 'ubuntu-cloud-archive':
+    location => 'http://ubuntu-cloud.archive.canonical.com/ubuntu',
+    release => "${::lsbdistcodename}-updates/juno",
+    repos => 'main',
+    required_packages => 'ubuntu-cloud-keyring',
+  } -> exec { "apt_upgrade":
+    command => "apt-get update && apt-get -y upgrade"
+  }
+
   # Locales
   class { 'locales':
     default_locale  => 'en_US.UTF-8',

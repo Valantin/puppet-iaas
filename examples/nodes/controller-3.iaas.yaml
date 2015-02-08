@@ -1,2 +1,40 @@
 # Node
 iaas::profile::base::ipaddress: 192.168.3.3
+
+# Keystone
+iaas::profile::keystone::public_ipaddress: 192.168.3.3
+iaas::profile::keystone::admin_ipaddress: 192.168.3.3
+
+# Glance
+iaas::profile::glance::public_ipaddress: 192.168.3.3
+iaas::profile::glance::admin_ipaddress: 192.168.3.3
+
+# Cinder
+iaas::profile::cinder::public_ipaddress: 192.168.3.3
+iaas::profile::cinder::admin_ipaddress: 192.168.3.3
+iaas::profile::cinder::secret: AQC5UtJUIJ4UMhAASaCGxC6d4wWhDW0GT6/IOA==
+
+# Neutron
+iaas::profile::neutron::server::public_ipaddress: 192.168.3.3
+iaas::profile::neutron::server::admin_ipaddress: 192.168.3.3
+
+# Ceph keys
+ceph::keys::args:
+  client.glance:
+    secret: AQBgGdJUCPwjLRAARZ0KEaxewYcYHT3j5Gl5Cg==
+    cap_mon: allow r
+    cap_osd: allow class-read object_prefix rbd_children, allow rwx pool=images
+    user: glance
+    group: glance
+    mode: '0550'
+  client.cinder:
+    secret: AQC5UtJUIJ4UMhAASaCGxC6d4wWhDW0GT6/IOA==
+    cap_mon: allow r
+    cap_osd: allow class-read object_prefix rbd_children, allow rwx pool=volumes, allow rwx pool=vms, allow rx pool=images
+    user: cinder
+    group: cinder
+    mode: '0550'
+
+# Nova
+iaas::profile::nova::controller::public_ipaddress: 192.168.3.3
+iaas::profile::nova::controller::admin_ipaddress: 192.168.3.3
