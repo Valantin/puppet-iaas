@@ -9,6 +9,8 @@ iaas::profile::base::ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAo/JkbGO
 iaas::profile::base::ntp_servers: [puppet]
 
 # Endpoints
+iaas::role::endpoint::servers: [endpoint-1, endpoint-2]
+iaas::role::endpoint::main_hostname: 'endpoint-1'
 iaas::role::endpoint::main_address: endpoint-1 # The main address used to access the cluster / the load-balancers ;; should point to the dns round-robin for endpoints
 iaas::role::endpoint::haproxy_port: [8140]
 
@@ -28,6 +30,8 @@ iaas::mysql::nova::user: nova
 iaas::mysql::nova::password: nova
 iaas::mysql::neutron::user: neutron
 iaas::mysql::neutron::password: neutron
+iaas::mysql::heat::user: heat
+iaas::mysql::heat::password: heat
 
 # Rabbitmq
 iaas::profile::rabbitmq::servers: [controller-1, controller-2, controller-3]
@@ -107,3 +111,10 @@ iaas::profile::neutron::server::service_plugins:
   - 'neutron.services.vpn.plugin.VPNDriverPlugin'
   - 'neutron.services.firewall.fwaas_plugin.FirewallPlugin'
   - 'neutron.services.metering.metering_plugin.MeteringPlugin'
+
+# Heat
+iaas::profile::heat::password: heat
+iaas::profile::heat::encryption_key: heat
+
+# Heat
+iaas::profile::horizon::secret: horizon

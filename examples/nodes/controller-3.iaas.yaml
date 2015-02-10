@@ -38,3 +38,11 @@ ceph::keys::args:
 # Nova
 iaas::profile::nova::controller::public_ipaddress: 192.168.3.3
 iaas::profile::nova::controller::admin_ipaddress: 192.168.3.3
+
+# Heat
+iaas::profile::heat::public_ipaddress: 192.168.3.3
+iaas::profile::heat::admin_ipaddress: 192.168.3.3
+
+# Horizon
+iaas::profile::horizon::public_ipaddress: 192.168.3.3
+iaas::profile::horizon::admin_ipaddress: 192.168.3.3

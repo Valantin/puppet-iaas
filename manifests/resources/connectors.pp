@@ -20,4 +20,8 @@ class iaas::resources::connectors {
   $user_neutron = hiera('iaas::mysql::neutron::user', 'nova')
   $pass_neutron = hiera('iaas::mysql::neutron::password', 'nova')
   $neutron = "mysql://${user_neutron}:${pass_neutron}@${endpoint}/neutron"
+
+  $user_heat = hiera('iaas::mysql::heat::user', 'heat')
+  $pass_heat = hiera('iaas::mysql::heat::password', 'heat')
+  $heat = "mysql://${user_heat}:${pass_heat}@${endpoint}/heat"
 }

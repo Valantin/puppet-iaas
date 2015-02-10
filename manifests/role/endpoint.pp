@@ -99,4 +99,24 @@ class iaas::role::endpoint (
       'balance' => 'source',
     }
   }
+
+  haproxy::listen { 'heat_api_cluster':
+    ipaddress => '0.0.0.0',
+    mode => 'tcp',
+    ports => '8004',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+      'balance' => 'source',
+    }
+  }
+
+  haproxy::listen { 'horizon_cluster':
+    ipaddress => '0.0.0.0',
+    mode => 'http',
+    ports => '80',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+      'balance' => 'source',
+    }
+  }
 }

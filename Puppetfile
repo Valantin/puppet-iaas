@@ -31,6 +31,8 @@ mod 'garethr-erlang', # Required by rabbitmq
     :git => 'https://github.com/garethr/garethr-erlang.git'
 mod 'puppetlabs-rabbitmq',
     :git => 'https://github.com/puppetlabs/puppetlabs-rabbitmq.git'
+mod 'puppetlabs-apache', #Required by horizon
+:git => 'https://github.com/puppetlabs/puppetlabs-apache.git'
 
 # Role Storage
 mod 'stackforge-ceph',
