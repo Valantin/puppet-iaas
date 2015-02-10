@@ -62,7 +62,7 @@ iaas::profile::keystone::users:
         admin: false
 
 # Glance
-iaas::profile::glance::keystone_password: glance
+iaas::profile::glance::password: glance
 
 # Cinder
 iaas::profile::cinder::password: cinder

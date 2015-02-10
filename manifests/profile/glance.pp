@@ -1,5 +1,5 @@
 class iaas::profile::glance (
-  $keystone_password = undef,
+  $password = undef,
   $public_ipaddress = undef,
   $admin_ipaddress = undef,
 
@@ -14,7 +14,7 @@ class iaas::profile::glance (
   class { 'ceph::keys': } ->
 
   class { '::glance::api':
-    keystone_password => $keystone_password,
+    keystone_password => $password,
     auth_host => $endpoint,
     keystone_tenant => 'services',
     keystone_user => 'glance',
@@ -33,7 +33,7 @@ class iaas::profile::glance (
   }
 
   class { '::glance::registry':
-    keystone_password => $keystone_password,
+    keystone_password => $password,
     database_connection => $iaas::resources::connectors::glance,
     auth_host => $endpoint,
     keystone_tenant => 'services',
@@ -51,7 +51,7 @@ class iaas::profile::glance (
   iaas::resources::database { 'glance': }
 
   class  { '::glance::keystone::auth':
-    password => $keystone_password,
+    password => $password,
     public_address => $public_ipaddress,
     admin_address => $admin_ipaddress,
     internal_address => $admin_ipaddress,

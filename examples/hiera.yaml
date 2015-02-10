@@ -1,1 +1,10 @@
-/etc/puppet/hiera.yaml
+---
+:backends:
+  - yaml
+
+:hierarchy:
+  - "nodes/%{::fqdn}"
+  - common
+
+:yaml:
+  :datadir: /etc/puppet/hieradata

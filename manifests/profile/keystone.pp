@@ -28,9 +28,9 @@ class iaas::profile::keystone (
   }
 
   class { 'keystone::endpoint':
-    public_url => "${public_ipaddress}",
-    admin_url => "${admin_ipaddress}",
-    internal_url => "${admin_ipaddress}",
+    public_url => "http://${public_ipaddress}:5000",
+    admin_url => "http://${admin_ipaddress}:35357",
+    internal_url => "http://${admin_ipaddress}:5000",
     region => $region,
   }
 
