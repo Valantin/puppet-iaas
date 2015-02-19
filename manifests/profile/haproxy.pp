@@ -1,8 +1,18 @@
-class iaas::role::endpoint (
-  $haproxy_ip,
-  $haproxy_port
-) {
-  class { 'haproxy': }
+class iaas::profile::haproxy {
+  class { '::haproxy':
+    defaults_options => {
+      'retries' => '3',
+      'timeout' => [
+        'http-request 10s',
+        'queue 24h',
+        'connect 10s',
+        'client 24h',
+        'server 24h',
+        'check 10s',
+      ],
+      'maxconn' => '8048',
+    },
+  }
 
   haproxy::listen { 'galera':
     ipaddress => '0.0.0.0',
@@ -19,10 +29,8 @@ class iaas::role::endpoint (
     mode => 'tcp',
     ports => '5672',
     options => {
-      'option' => ['clitcpka'],
+      'option' => ['tcpka'],
       'balance' => 'source',
-      'timeout client' => '1h',
-      'timeout server' => '1h',
     }
   }
 
