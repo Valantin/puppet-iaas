@@ -41,6 +41,8 @@ mod 'stackforge-ceph',
 # Role Endpoint
 mod 'puppetlabs-haproxy',
     :git => 'https://github.com/puppetlabs/puppetlabs-haproxy.git'
+mod 'thias-sysctl',
+    :git => 'https://github.com/thias/puppet-sysctl.git'
 
 ## The core OpenStack modules
 mod "keystone",

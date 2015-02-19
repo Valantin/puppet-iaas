@@ -67,6 +67,7 @@ iaas::profile::glance::password: glance
 # Cinder
 iaas::profile::cinder::password: cinder
 iaas::profile::cinder::volume_size: 8G
+iaas::profile::cinder::secret: 5e899071-df68-40d3-b0ea-6ec22b7c12a0
 
 # Ceph
 iaas::role::storage::cluster_vlan: 8
@@ -102,15 +103,17 @@ iaas::profile::nova::controller::password: nova
 # Neutron
 iaas::profile::neutron::password: neutron
 iaas::profile::neutron::secret: neutron
+iaas::profile::neutron::external_network: 10.0.0.0/8
 
-iaas::profile::neutron::server::data_network_address: 10.0.0.0
-iaas::profile::neutron::server::core_plugin: 'neutron.plugins.ml2.plugin.Ml2Plugin'
-iaas::profile::neutron::server::service_plugins:
-  - 'neutron.services.l3_router.l3_router_plugin.L3RouterPlugin'
-  - 'neutron.services.loadbalancer.plugin.LoadBalancerPlugin'
-  - 'neutron.services.vpn.plugin.VPNDriverPlugin'
-  - 'neutron.services.firewall.fwaas_plugin.FirewallPlugin'
-  - 'neutron.services.metering.metering_plugin.MeteringPlugin'
+iaas::profile::neutron::common::core_plugin: 'ml2'
+iaas::profile::neutron::common::service_plugins:
+  - 'router'
+  - 'lbaas'
+  - 'vpnaas'
+  - 'firewall'
+  - 'metering'
+
+iaas::profile::neutron::agent::data_network_address: 10.0.0.0
 
 # Heat
 iaas::profile::heat::password: heat

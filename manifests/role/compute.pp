@@ -1,6 +1,6 @@
 class iaas::role::compute (
 
 ) {
-  # Base
-  class { 'iaas::profile::base': }
+  class { 'iaas::profile::base': } ->
+  class { 'iaas::profile::neutron::client': }
 }
