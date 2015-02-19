@@ -14,6 +14,8 @@ class iaas::profile::nova::controller (
   include iaas::resources::connectors
   iaas::resources::database { 'nova': }
 
+  include iaas::profile::nova::common
+
   class { '::nova::keystone::auth':
     password => $password,
     public_address => $public_ipaddress,
@@ -21,19 +23,6 @@ class iaas::profile::nova::controller (
     internal_address => $admin_ipaddress,
     region => $region,
   }
-
-  class { '::nova':
-    database_connection => $iaas::resources::connectors::nova,
-    glance_api_servers => $endpoint,
-    memcached_servers => ["localhost:11211"],
-    rabbit_host => $endpoint,
-    rabbit_userid => $rabbitmq_user,
-    rabbit_password => $rabbitmq_password,
-    mysql_module => '2.3',
-    database_idle_timeout => 50, # Important to avoid facing "MySQL server has gone away" while using HAProxy+Galera. Should be < HAProxy server timeout (default: 60s)
-  }
-
-  nova_config { 'DEFAULT/default_floating_pool': value => 'public' }
 
   class { '::nova::api':
     enabled => true,
@@ -44,7 +33,7 @@ class iaas::profile::nova::controller (
 
   class { '::nova::vncproxy':
     enabled => true,
-    host => $::openstack::config::controller_address_api,
+    host => $admin_ipaddress,
   }
 
   class { [ 'nova::scheduler', 'nova::consoleauth', 'nova::conductor']:
@@ -59,14 +48,11 @@ class iaas::profile::nova::controller (
     options => 'check inter 2000 rise 2 fall 5',
   }
 
-  /*class { '::nova::compute::neutron': }
-
-  class { '::nova::network::neutron':
-    neutron_admin_password => $neutron_password,
-    neutron_region_name => $region,
-    neutron_admin_auth_url => "http://${endpoint}:35357/v2.0",
-    neutron_url => "http://${endpoint}:9696",
-    vif_plugging_is_fatal => false,
-    vif_plugging_timeout => '0',
-  }*/
+  @@haproxy::balancermember { "nova_novncproxy_${::fqdn}":
+    listening_service => 'nova_novncproxy',
+    server_names => $::hostname,
+    ipaddresses => $public_ipaddress,
+    ports => '6080',
+    options => 'check inter 2000 rise 2 fall 5',
+  }
 }

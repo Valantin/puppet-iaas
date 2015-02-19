@@ -23,6 +23,8 @@ class iaas::profile::glance (
     mysql_module => '2.3',
     os_region_name => $region,
     known_stores => ['rbd'],
+    show_image_direct_url => true,
+    pipeline => 'keystone',
   }
 
   class { '::glance::backend::rbd':

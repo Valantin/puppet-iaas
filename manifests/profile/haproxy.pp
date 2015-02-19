@@ -94,6 +94,16 @@ class iaas::profile::haproxy {
     }
   }
 
+  haproxy::listen { 'nova_novncproxy':
+    ipaddress => '0.0.0.0',
+    mode => 'tcp',
+    ports => '6080',
+    options => {
+      'option' => ['tcpka', 'tcplog'],
+      'balance' => 'source',
+    }
+  }
+
   haproxy::listen { 'neutron_api_cluster':
     ipaddress => '0.0.0.0',
     mode => 'tcp',

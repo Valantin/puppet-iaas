@@ -53,7 +53,7 @@ class iaas::profile::cinder (
   class { '::cinder::volume::rbd':
     rbd_pool => 'volumes',
     rbd_user => 'cinder',
-    rbd_secret_uuid => $secret, #FIXME Necessary ?
+    rbd_secret_uuid => $secret,
   }
 
   class { '::cinder::backup': }
