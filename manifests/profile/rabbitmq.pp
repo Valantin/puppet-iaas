@@ -31,6 +31,10 @@ class iaas::profile::rabbitmq (
     write_permission => '.*',
     read_permission => '.*',
     provider => 'rabbitmqctl',
+  } ->
+  exec { 'rabbitmq_ha_queues':
+    command => "rabbitmqctl set_policy ha-all \"^.*\" \'{\"ha-mode\":\"all\"}\'",
+    unless => "rabbitmqctl list_policies | grep ha-all"
   } # -> Anchor<| title == 'nova-start' |> ->
 
   @@haproxy::balancermember { "rabbitmq_${::fqdn}":
