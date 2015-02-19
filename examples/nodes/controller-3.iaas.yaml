@@ -1,22 +1,7 @@
 # Node
 iaas::profile::base::ipaddress: 192.168.3.3
-
-# Keystone
-iaas::profile::keystone::public_ipaddress: 192.168.3.3
-iaas::profile::keystone::admin_ipaddress: 192.168.3.3
-
-# Glance
-iaas::profile::glance::public_ipaddress: 192.168.3.3
-iaas::profile::glance::admin_ipaddress: 192.168.3.3
-
-# Cinder
-iaas::profile::cinder::public_ipaddress: 192.168.3.3
-iaas::profile::cinder::admin_ipaddress: 192.168.3.3
-iaas::profile::cinder::secret: AQC5UtJUIJ4UMhAASaCGxC6d4wWhDW0GT6/IOA==
-
-# Neutron
-iaas::profile::neutron::server::public_ipaddress: 192.168.3.3
-iaas::profile::neutron::server::admin_ipaddress: 192.168.3.3
+iaas::public_ipaddress: 192.168.3.3 #TODO Manage the creation of vnic in base profile to make possible the use of different IPs with only one network card
+iaas::admin_ipaddress: 192.168.3.3
 
 # Ceph keys
 ceph::keys::args:
@@ -34,15 +19,3 @@ ceph::keys::args:
     user: cinder
     group: cinder
     mode: '0550'
-
-# Nova
-iaas::profile::nova::controller::public_ipaddress: 192.168.3.3
-iaas::profile::nova::controller::admin_ipaddress: 192.168.3.3
-
-# Heat
-iaas::profile::heat::public_ipaddress: 192.168.3.3
-iaas::profile::heat::admin_ipaddress: 192.168.3.3
-
-# Horizon
-iaas::profile::horizon::public_ipaddress: 192.168.3.3
-iaas::profile::horizon::admin_ipaddress: 192.168.3.3

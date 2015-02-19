@@ -1,7 +1,7 @@
 class iaas::profile::horizon (
   $secret = undef,
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
 
   $endpoint_address = hiera('iaas::role::endpoint::main_address', undef),
   $endpoint_servers = hiera('iaas::role::endpoint::servers', undef),

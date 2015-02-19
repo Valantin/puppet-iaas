@@ -1,7 +1,7 @@
 class iaas::profile::nova::controller (
   $password = undef,
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
 
   $neutron_secret = hiera('iaas::profile::neutron::secret', undef),
   $neutron_password = hiera('iaas::profile::neutron::password', undef),

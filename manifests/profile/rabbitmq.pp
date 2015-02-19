@@ -1,4 +1,6 @@
 class iaas::profile::rabbitmq (
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+
   $servers = undef,
   $user = undef,
   $password = undef,

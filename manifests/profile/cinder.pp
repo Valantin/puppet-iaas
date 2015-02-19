@@ -1,7 +1,7 @@
 class iaas::profile::cinder (
   $password = undef,
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
   $secret = undef,
   $volume_size = undef,
 

@@ -1,10 +1,10 @@
 class iaas::profile::neutron::server (
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
 
   $data_network_address = undef,
   $core_plugin = undef,
   $service_plugins = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress'),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
 
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $nova_password = hiera('iaas::profile::nova::controller::password', undef),

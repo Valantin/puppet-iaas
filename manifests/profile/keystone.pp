@@ -5,8 +5,8 @@ class iaas::profile::keystone (
   $tenants = undef,
   $users = undef,
 
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
 
   $region = hiera('iaas::region', undef),
 ) {

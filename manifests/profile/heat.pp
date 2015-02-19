@@ -1,8 +1,8 @@
 class iaas::profile::heat (
   $password = undef,
   $encryption_key = undef,
-  $public_ipaddress = undef,
-  $admin_ipaddress = undef,
+  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
+  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
 
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
