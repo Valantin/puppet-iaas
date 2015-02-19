@@ -37,12 +37,10 @@ class iaas::profile::cinder (
   class { '::cinder::api':
     keystone_password => $password,
     keystone_auth_host => $endpoint,
-    enabled => true,
   }
 
   class { '::cinder::scheduler':
     scheduler_driver => 'cinder.scheduler.simple.SimpleScheduler',
-    enabled => true,
   }
 
   class { '::cinder::setup_test_volume':
@@ -50,15 +48,17 @@ class iaas::profile::cinder (
     size => $volume_size
   } ->
 
-  class { '::cinder::volume':
-    package_ensure => present,
-    enabled => true,
-  }
+  class { '::cinder::volume': }
 
   class { '::cinder::volume::rbd':
     rbd_pool => 'volumes',
     rbd_user => 'cinder',
     rbd_secret_uuid => $secret, #FIXME Necessary ?
+  }
+
+  class { '::cinder::backup': }
+  class { '::cinder::backup::ceph':
+    backup_ceph_user => 'cinder-backup',
   }
 
   @@haproxy::balancermember { "cinder_api_${::fqdn}":

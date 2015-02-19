@@ -50,4 +50,7 @@ ceph-disk list 2> /dev/null | grep ' *${osd_disk}${osd_partition}.*ceph data'
   ceph::pool { 'vms':
     pg_num => 128,
   }
+  ceph::pool { 'backups':
+    pg_num => 128,
+  }
 }
