@@ -36,7 +36,7 @@ class iaas::profile::rabbitmq (
   @@haproxy::balancermember { "rabbitmq_${::fqdn}":
     listening_service => 'rabbitmq',
     server_names => $::hostname,
-    ipaddresses => $::ipaddress,
+    ipaddresses => $admin_ipaddress,
     ports => '5672',
     options => 'check inter 2000 rise 2 fall 5',
   }

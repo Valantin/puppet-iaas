@@ -23,7 +23,6 @@ class iaas::profile::glance (
     mysql_module => '2.3',
     os_region_name => $region,
     known_stores => ['rbd'],
-    database_idle_timeout => 50, # Important to avoid facing "MySQL server has gone away" while using HAProxy+Galera. Should be < HAProxy server timeout (default: 60s)
   }
 
   class { '::glance::backend::rbd':
@@ -39,7 +38,6 @@ class iaas::profile::glance (
     keystone_tenant => 'services',
     keystone_user => 'glance',
     mysql_module => '2.3',
-    database_idle_timeout => 50, # Important to avoid facing "MySQL server has gone away" while using HAProxy+Galera. Should be < HAProxy server timeout (default: 60s)
   }
 
   class { '::glance::notify::rabbitmq':
@@ -61,7 +59,7 @@ class iaas::profile::glance (
   @@haproxy::balancermember { "glance_registry_${::fqdn}":
     listening_service => 'glance_registry_cluster',
     server_names => $::hostname,
-    ipaddresses => $::ipaddress,
+    ipaddresses => $admin_ipaddress,
     ports => '9191',
     options => 'check inter 2000 rise 2 fall 5',
   }

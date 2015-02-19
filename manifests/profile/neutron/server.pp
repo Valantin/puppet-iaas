@@ -20,7 +20,6 @@ class iaas::profile::neutron::server (
     enabled => true,
     sync_db => true,
     mysql_module => '2.3',
-    database_idle_timeout => 50, # Important to avoid facing "MySQL server has gone away" while using HAProxy+Galera. Should be < HAProxy server timeout (default: 60s)
     l3_ha => true,
   }
 
