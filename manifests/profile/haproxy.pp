@@ -1,4 +1,11 @@
-class iaas::profile::haproxy {
+class iaas::profile::haproxy (
+  $stats_enabled = undef,
+  $stats_ports = undef,
+  $stats_refresh = undef,
+  $stats_login = undef,
+  $stats_password = undef,
+  $stats_uri = undef,
+) {
   class { '::haproxy':
     defaults_options => {
       'retries' => '3',
@@ -12,6 +19,24 @@ class iaas::profile::haproxy {
       ],
       'maxconn' => '8048',
     },
+  }
+
+  if stats_enabled {
+    haproxy::listen { 'stats':
+      ipaddress => '0.0.0.0',
+      mode => 'http',
+      ports => $stats_ports,
+      options => {
+        'stats' => [
+          'enable',
+          'hide-version',
+          "refresh ${stats_refresh}",
+          'show-node',
+          "auth ${stats_login}:${stats_password}",
+          "uri ${stats_uri}"
+        ],
+      }
+    }
   }
 
   haproxy::listen { 'galera':

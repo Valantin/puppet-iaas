@@ -15,6 +15,13 @@ iaas::role::endpoint::main_hostname: 'endpoint-1'
 iaas::role::endpoint::main_address: endpoint-1 # The main address used to access the cluster / the load-balancers ;; should point to the dns round-robin for endpoints
 iaas::role::endpoint::haproxy_port: [8140]
 
+iaas::profile::haproxy::stats_enabled: true
+iaas::profile::haproxy::stats_ports: [1936]
+iaas::profile::haproxy::stats_refresh: "30s"
+iaas::profile::haproxy::stats_login: "stats"
+iaas::profile::haproxy::stats_password: "stats"
+iaas::profile::haproxy::stats_uri: "/"
+
 # Galera MySQL
 iaas::profile::database::servers: [controller-1, controller-2, controller-3]
 iaas::profile:database::galera_master: controller-1
