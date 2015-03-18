@@ -1,7 +1,2 @@
-# Node
-iaas::profile::base::ipaddress: 192.168.2.1
-iaas::profile::base::skip_networking: true
-
 # Neutron
-iaas::profile::neutron::router::data_ipaddress: 10.0.0.1
 iaas::profile::neutron::router::external_device: eth0

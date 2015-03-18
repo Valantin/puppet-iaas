@@ -1,5 +1,5 @@
 class iaas::profile::rabbitmq (
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $admin_interface = hiera('iaas::admin_interface', undef),
 
   $servers = undef,
   $user = undef,
@@ -40,7 +40,7 @@ class iaas::profile::rabbitmq (
   @@haproxy::balancermember { "rabbitmq_${::fqdn}":
     listening_service => 'rabbitmq',
     server_names => $::hostname,
-    ipaddresses => $admin_ipaddress,
+    ipaddresses => $::facts["ipaddress_${admin_interface}"],
     ports => '5672',
     options => 'check inter 2000 rise 2 fall 5',
   }

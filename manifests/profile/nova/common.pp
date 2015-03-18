@@ -1,5 +1,5 @@
 class iaas::profile::nova::common (
-  $public_ipaddress = hiera('iaas::public_ipaddress'),
+  $public_interface = hiera('iaas::public_interface', undef),
 
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $nova_password = hiera('iaas::profile::nova::controller::password', undef),

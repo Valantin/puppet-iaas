@@ -1,12 +1,8 @@
 class iaas::profile::base (
-  $ipaddress,
-  $netmask,
-  $gateway,
   $dns_servers,
   $dns_searchdomain,
   $ssh_public_key,
   $ntp_servers,
-  $skip_networking = false,
 ) {
   # Sysctl
   sysctl { 'net.ipv4.tcp_keepalive_time': value => '60' }
@@ -41,27 +37,6 @@ class iaas::profile::base (
   }
 
   # Network
-  if $skip_networking == false {
-    package { 'ifupdown-extra': } ->
-    network_config { "eth0":
-      ensure => 'present',
-      family => 'inet',
-      method => 'static',
-      ipaddress => $ipaddress,
-      netmask => $netmask,
-    } ~>
-    network_route { 'route_default':
-      ensure => 'present',
-      gateway => $gateway,
-      interface => 'eth0',
-      netmask => '0.0.0.0',
-      network => 'default'
-    } ~>
-    exec { "ifup_eth0":
-      command => "ifdown eth0 && ifup eth0"
-    }
-  }
-
   class { 'resolv_conf':
     nameservers => $dns_servers,
     domainname  => $dns_searchdomain,

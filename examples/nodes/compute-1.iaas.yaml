@@ -1,11 +1,3 @@
-# Node
-iaas::profile::base::ipaddress: 192.168.4.1
-iaas::public_ipaddress: 192.168.4.1 #TODO Manage the creation of vnic in base profile to make possible the use of different IPs with only one network card
-iaas::admin_ipaddress: 192.168.4.1
-
-# Neutron
-iaas::profile::neutron::client::data_ipaddress: 10.0.1.1
-
 # Ceph keys
 ceph::keys::args:
   client.cinder:

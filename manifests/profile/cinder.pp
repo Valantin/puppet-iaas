@@ -1,7 +1,6 @@
 class iaas::profile::cinder (
   $password = undef,
-  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $public_interface = hiera('iaas::public_interface', undef),
   $secret = undef,
   $volume_size = undef,
 
@@ -28,15 +27,16 @@ class iaas::profile::cinder (
 
   class { '::cinder::keystone::auth':
     password => $password,
-    public_address => $public_ipaddress,
-    admin_address => $admin_ipaddress,
-    internal_address => $admin_ipaddress,
+    public_address => $endpoint,
+    admin_address => $endpoint,
+    internal_address => $endpoint,
     region => $region,
   }
 
   class { '::cinder::api':
     keystone_password => $password,
-    keystone_auth_host => $endpoint,
+    auth_uri => "http://${endpoint}:5000/v2.0",
+    identity_uri => "http://${endpoint}:35357",
   }
 
   class { '::cinder::scheduler':
@@ -64,7 +64,7 @@ class iaas::profile::cinder (
   @@haproxy::balancermember { "cinder_api_${::fqdn}":
     listening_service => 'cinder_api_cluster',
     server_names => $::hostname,
-    ipaddresses => $public_ipaddress,
+    ipaddresses => $::facts["ipaddress_${public_interface}"],
     ports => '8776',
     options => 'check inter 2000 rise 2 fall 5',
   }

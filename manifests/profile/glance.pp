@@ -1,7 +1,7 @@
 class iaas::profile::glance (
   $password = undef,
-  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $public_interface = hiera('iaas::public_interface', undef),
+  $admin_interface = hiera('iaas::admin_interface', undef),
 
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
@@ -15,7 +15,8 @@ class iaas::profile::glance (
 
   class { '::glance::api':
     keystone_password => $password,
-    auth_host => $endpoint,
+    auth_uri => "http://${endpoint}:5000/v2.0",
+    identity_uri => "http://${endpoint}:35357",
     keystone_tenant => 'services',
     keystone_user => 'glance',
     database_connection => $iaas::resources::connectors::glance,
@@ -36,7 +37,8 @@ class iaas::profile::glance (
   class { '::glance::registry':
     keystone_password => $password,
     database_connection => $iaas::resources::connectors::glance,
-    auth_host => $endpoint,
+    auth_uri => "http://${endpoint}:5000/v2.0",
+    identity_uri => "http://${endpoint}:35357",
     keystone_tenant => 'services',
     keystone_user => 'glance',
     mysql_module => '2.3',
@@ -52,23 +54,23 @@ class iaas::profile::glance (
 
   class  { '::glance::keystone::auth':
     password => $password,
-    public_address => $public_ipaddress,
-    admin_address => $admin_ipaddress,
-    internal_address => $admin_ipaddress,
+    public_address => $endpoint,
+    admin_address => $endpoint,
+    internal_address => $endpoint,
     region => $region,
   }
 
   @@haproxy::balancermember { "glance_registry_${::fqdn}":
     listening_service => 'glance_registry_cluster',
     server_names => $::hostname,
-    ipaddresses => $admin_ipaddress,
+    ipaddresses => $::facts["ipaddress_${admin_interface}"],
     ports => '9191',
     options => 'check inter 2000 rise 2 fall 5',
   }
   @@haproxy::balancermember { "glance_api_${::fqdn}":
     listening_service => 'glance_api_cluster',
     server_names => $::hostname,
-    ipaddresses => $public_ipaddress,
+    ipaddresses => $::facts["ipaddress_${public_interface}"],
     ports => '9292',
     options => 'check inter 2000 rise 2 fall 5',
   }

@@ -2,13 +2,16 @@ class iaas::profile::neutron::common (
   $core_plugin = undef,
   $service_plugins = undef,
 
-  $neutron_password = hiera('iaas::profile::neutron::password', undef),
-
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
   $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', undef),
   $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', undef),
 ) {
+  file { 'etc_default_neutron-server':
+    path => '/etc/default/neutron-server',
+    ensure => 'present'
+  }
+
   class { '::neutron':
     core_plugin => $core_plugin,
     allow_overlapping_ips => true,

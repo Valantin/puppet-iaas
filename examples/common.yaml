@@ -1,8 +1,9 @@
 iaas::region: "polytech"
 
+iaas::public_interface: eth0
+iaas::admin_interface: eth0
+
 # Node
-iaas::profile::base::netmask: 255.255.192.0
-iaas::profile::base::gateway: 192.168.0.1
 iaas::profile::base::dns_servers: [192.168.0.1, 8.8.8.8, 8.8.4.4]
 iaas::profile::base::dns_searchdomain: iaas
 iaas::profile::base::ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAo/JkbGO6R7g1ZxARi0xWVM7FOfN02snRAcIO6vT9M7xMUkWVLgD+hM/o91lk+UFiYdql0CATobpFWncRL36KaUqsbw9/1BlI40wg296XHXSSnxhxZ4L7ytf6G1tyN319HXlI2kh9vAf/fy++yDvkH8dI3k1oLoW+mZPET6Pff04/6AXXrRlS5mhmGv9irGwiDHtVKpj6lU8DN/UtOrv1tiQ0pgwEJq05fLGoQfgPNaBCnW2z4Ubpn2gyMcMBMpSwo4hCqJePd349e4bLmFcT+gXYg7Mnup1DoTDlowFFN56wpxQbdp96IxWzU+jYPaIAuRo+BJzCyOS8qBv0Z4RZrgop0qp2JYiVwmViO6TZhIDz6loQJXUOIleQmNgTbiZx8Bwv5GY2jMYoVwlBp7yy5bRjxfbFsJ0vU7TVzNAG7oEJy/74HmHmWzRQlSlQjesr8gRbm9zgR8wqc/L107UOWFg7Cgh8ZNjKuADbXqYuda1Y9m2upcfS26UPz5l5PW5uFRMHZSi8pb1XV6/0Z8H8vwsh37Ur6aLi/5jruRmKhdlsNrB1IiDicBsPW3yg7HHSIdPU4oBNPC77yDCT3l4CKr4el81RrZt7FbJPfY+Ig9Q5O+05f6I8+ZOlJGyZ/Qfyl2aVm1HnlJKuBqPxeic8tMng/9B5N7uZL6Y3k5jFU8c= contact@harmony-hosting.com
@@ -103,8 +104,8 @@ iaas::profile::nova::controller::password: nova
 # Neutron
 iaas::profile::neutron::password: neutron
 iaas::profile::neutron::secret: neutron
-iaas::profile::neutron::external_network: 10.0.0.0/8
-
+iaas::profile::neutron::external_network: 192.168.0.0/18
+iaas::profile::neutron::external_gateway: 192.168.0.1
 iaas::profile::neutron::common::core_plugin: 'ml2'
 iaas::profile::neutron::common::service_plugins:
   - 'router'
@@ -112,8 +113,6 @@ iaas::profile::neutron::common::service_plugins:
   - 'vpnaas'
   - 'firewall'
   - 'metering'
-
-iaas::profile::neutron::agent::data_network_address: 10.0.0.0
 
 # Heat
 iaas::profile::heat::password: heat

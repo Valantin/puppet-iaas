@@ -1,13 +1,9 @@
 class iaas::profile::neutron::router (
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $public_interface = hiera('iaas::public_interface', undef),
 
-  $data_ipaddress = undef,
   $external_device = undef,
   $external_network = hiera('iaas::profile::neutron::external_network', undef),
-
-  $ipaddress = hiera('iaas::profile::base::ipaddress'),
-  $netmask = hiera('iaas::profile::base::netmask'),
-  $gateway = hiera('iaas::profile::base::gateway'),
+  $external_gateway = hiera('iaas::profile::neutron::external_gateway', undef),
 
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $neutron_secret = hiera('iaas::profile::neutron::secret', undef),
@@ -16,56 +12,60 @@ class iaas::profile::neutron::router (
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
 ) {
   sysctl { 'net.ipv4.ip_forward': value => '1' }
+  sysctl { 'net.ipv4.conf.all.rp_filter': value => '0' }
+  sysctl { 'net.ipv4.conf.default.rp_filter': value => '0' }
+
+  package { 'ifupdown-extra': }
 
   include iaas::profile::neutron::common
-
-  class { '::neutron::agents::ml2::ovs':
-    enable_tunneling => true,
-    local_ip => $data_ipaddress,
-    enabled => true,
-    tunnel_types => ['gre'],
-    bridge_mappings => ['external:br-ex'],
-  }
 
   class { '::neutron::agents::l3':
     external_network_bridge => 'br-ex',
     use_namespaces => true,
     router_delete_namespaces => true,
-    enabled => true,
+    ha_enabled => true,
   }
 
   class { '::neutron::agents::dhcp':
-    enabled => true,
     dhcp_delete_namespaces => true,
+    enable_isolated_metadata => true,
+    enable_metadata_network => true,
   }
 
-  class { '::neutron::agents::lbaas':
-    enabled => true,
-  }
-
-  class { '::neutron::agents::vpnaas':
-    enabled => true,
-  }
-
-  class { '::neutron::agents::metering':
-    enabled => true,
-  }
-
-  class { '::neutron::services::fwaas':
-    enabled => true,
-  }
+  class { '::neutron::agents::lbaas': }
+  class { '::neutron::agents::vpnaas': }
+  class { '::neutron::agents::metering': }
+  class { '::neutron::services::fwaas': }
 
   class { '::neutron::agents::metadata':
     auth_password => $neutron_password,
     shared_secret => $neutron_secret,
-    auth_url => "http://${endpoint}:35357/v2.0",
+    auth_url => "http://${endpoint}:5000/v2.0",
     auth_region => $region,
-    metadata_ip => $admin_ipaddress,
+    metadata_ip => $endpoint,
     enabled => true,
   }
 
+  if $ipaddress_br_ex == '' {
+    $local_ip = $::facts["ipaddress_${public_interface}"]
+  } else {
+    $local_ip = $::ipaddress_br_ex
+  }
+  class { '::neutron::agents::ml2::ovs':
+      enable_tunneling => true,
+      local_ip => $local_ip,
+      enabled => true,
+      tunnel_types => ['gre'],
+      bridge_mappings => ['external:br-ex'],
+      require => File['etc_default_neutron-server'],
+  }
+
   $_external_device = device_for_network($external_network)
-  if $_external_device != 'br-ex' {
+  if $_external_device != 'br_ex' {
+    # Store initial configuration from the public interface (assigned by DHCP) to restore on br-ex
+    $public_ipaddress = $::facts["ipaddress_${public_interface}"]
+    $public_netmask = $::facts["netmask_${public_interface}"]
+
     network_config { $external_device:
       ensure  => 'present',
       family  => 'inet',
@@ -79,19 +79,21 @@ class iaas::profile::neutron::router (
       ensure  => 'present',
       family  => 'inet',
       method  => 'static',
-      ipaddress => $ipaddress,
-      netmask => $netmask,
-    } ->
-    network_route { 'route_default':
-      ensure => 'present',
-      gateway => $gateway,
-      interface => 'br-ex',
-      netmask => '0.0.0.0',
-      network => 'default'
+      ipaddress => $public_ipaddress,
+      netmask => $public_netmask,
     } ->
     vs_port { $external_device:
       ensure => present,
       bridge => 'br-ex',
+      require => Class['::neutron::agents::ml2::ovs'],
+    } ->
+    network_route { 'route_default':
+      ensure => 'present',
+      gateway => $external_gateway,
+      interface => 'br-ex',
+      netmask => '0.0.0.0',
+      network => 'default',
+      require => Package['ifupdown-extra']
     }
   }
 }

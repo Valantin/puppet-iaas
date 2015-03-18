@@ -1,8 +1,7 @@
 class iaas::profile::heat (
   $password = undef,
   $encryption_key = undef,
-  $public_ipaddress = hiera('iaas::public_ipaddress', undef),
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $public_interface = hiera('iaas::public_interface', undef),
 
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
@@ -14,9 +13,9 @@ class iaas::profile::heat (
 
   class { '::heat::keystone::auth':
     password         => $password,
-    public_address   => $public_ipaddress,
-    admin_address    => $admin_ipaddress,
-    internal_address => $admin_ipaddress,
+    public_address   => $endpoint,
+    admin_address    => $endpoint,
+    internal_address => $endpoint,
     region           => $region,
   }
 
@@ -32,7 +31,7 @@ class iaas::profile::heat (
   }
 
   class { '::heat::api':
-    bind_host => $public_ipaddress,
+    bind_host => $::facts["ipaddress_${public_interface}"],
   }
 
   class { '::heat::engine':
@@ -42,8 +41,8 @@ class iaas::profile::heat (
   @@haproxy::balancermember { "heat_api_${::fqdn}":
     listening_service => 'heat_api_cluster',
     server_names => $::hostname,
-    ipaddresses => $public_ipaddress,
     ports => '8000',
+    ipaddresses => $::facts["ipaddress_${public_interface}"],
     options => 'check inter 2000 rise 2 fall 5',
   }
 }

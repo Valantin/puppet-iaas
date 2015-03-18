@@ -1,5 +1,5 @@
 class iaas::profile::nova::compute (
-  $admin_ipaddress = hiera('iaas::admin_ipaddress', undef),
+  $admin_interface = hiera('iaas::admin_interface', undef),
 
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $cinder_secret = hiera('iaas::profile::cinder::secret', undef),
@@ -15,10 +15,10 @@ class iaas::profile::nova::compute (
   class { 'ceph::keys': }
 
   class { '::nova::compute':
-    enabled                       => true,
-    vnc_enabled                   => true,
-    vncserver_proxyclient_address => $admin_ipaddress,
-    vncproxy_host                 => $endpoint,
+    enabled => true,
+    vnc_enabled => true,
+    vncserver_proxyclient_address => $::facts["ipaddress_${admin_interface}"],
+    vncproxy_host => $endpoint,
   }
 
   class { '::nova::compute::neutron': }
