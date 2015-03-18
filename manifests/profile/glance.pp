@@ -22,6 +22,7 @@ class iaas::profile::glance (
     database_connection => $iaas::resources::connectors::glance,
     registry_host => 'localhost',
     mysql_module => '2.3',
+    database_idle_timeout => 3,
     os_region_name => $region,
     known_stores => ['rbd'],
     show_image_direct_url => true,
@@ -42,6 +43,7 @@ class iaas::profile::glance (
     keystone_tenant => 'services',
     keystone_user => 'glance',
     mysql_module => '2.3',
+    database_idle_timeout => 3,
   }
 
   class { '::glance::notify::rabbitmq':

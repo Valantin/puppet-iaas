@@ -11,13 +11,13 @@ class iaas::profile::haproxy (
       'retries' => '3',
       'timeout' => [
         'http-request 10s',
-        'queue 24h',
+        'queue 1m',
         'connect 10s',
-        'client 24h',
-        'server 24h',
+        'client 1m',
+        'server 1m',
         'check 10s',
       ],
-      'maxconn' => '8048',
+      'maxconn' => '8092',
     },
   }
 
@@ -56,12 +56,14 @@ class iaas::profile::haproxy (
     options => {
       'option' => ['tcpka'],
       'balance' => 'source',
+      'timeout' => [
+        'client 7d',
+        'server 7d',
+      ]
     }
   }
-
   haproxy::listen { 'keystone_admin_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '35357',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -71,7 +73,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'keystone_public_internal_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '5000',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -81,7 +82,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'glance_api_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '9292',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -91,17 +91,16 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'glance_registry_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '9191',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
       'balance' => 'source',
+      'http-check' => 'expect status 401',
     }
   }
 
   haproxy::listen { 'cinder_api_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '8776',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -111,7 +110,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'nova_api_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '8774',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -130,7 +128,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'nova_novncproxy':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '6080',
     options => {
       'option' => ['tcpka', 'tcplog'],
@@ -140,7 +137,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'neutron_api_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '9696',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -150,7 +146,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'heat_api_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'tcp',
     ports => '8004',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
@@ -160,7 +155,6 @@ class iaas::profile::haproxy (
 
   haproxy::listen { 'horizon_cluster':
     ipaddress => '0.0.0.0',
-    mode => 'http',
     ports => '80',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],

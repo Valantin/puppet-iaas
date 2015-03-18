@@ -4,8 +4,9 @@ class iaas::profile::base (
   $ssh_public_key,
   $ntp_servers,
 ) {
-  # Sysctl
-  sysctl { 'net.ipv4.tcp_keepalive_time': value => '60' }
+  # Keep-alive values
+  sysctl { 'net.ipv4.tcp_keepalive_time': value => '30' }
+  sysctl { 'net.ipv4.tcp_keepalive_intvl': value => '15' }
 
   # Apt repo
   apt::source { 'ubuntu-cloud-archive':

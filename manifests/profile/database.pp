@@ -15,6 +15,6 @@ class iaas::profile::database (
     server_names      => $::hostname,
     ipaddresses       => $::ipaddress,
     ports             => '3306',
-    options           => 'check port 9200 inter 2000 rise 2 fall 5',
+    options           => 'check port 9200 inter 2000 rise 2 fall 5 backup',
   }
 }

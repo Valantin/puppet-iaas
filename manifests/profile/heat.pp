@@ -27,7 +27,7 @@ class iaas::profile::heat (
     keystone_host       => $endpoint,
     keystone_password   => $password,
     mysql_module        => '2.3',
-    database_idle_timeout => 50, # Important to avoid facing "MySQL server has gone away" while using HAProxy+Galera. Should be < HAProxy server timeout (default: 60s)
+    database_idle_timeout => 3,
   }
 
   class { '::heat::api':

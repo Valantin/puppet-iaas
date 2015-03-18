@@ -19,6 +19,7 @@ class iaas::profile::nova::common (
     rabbit_userid => $rabbitmq_user,
     rabbit_password => $rabbitmq_password,
     mysql_module => '2.3',
+    database_idle_timeout => 3,
   }
 
   class { '::nova::network::neutron':

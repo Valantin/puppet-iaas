@@ -21,6 +21,7 @@ class iaas::profile::neutron::server (
     enabled => true,
     sync_db => true,
     mysql_module => '2.3',
+    database_idle_timeout => 3,
     l3_ha => true,
     allow_automatic_l3agent_failover => true,
   }

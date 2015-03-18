@@ -20,6 +20,7 @@ class iaas::profile::rabbitmq (
     cluster_node_type => 'ram',
     wipe_db_on_cookie_change => true,
     cluster_partition_handling => 'pause_minority',
+    tcp_keepalive => true, #FIXME May cause connectivity issues with OpenStack in some configurations
   } ->
   rabbitmq_user { $user:
     admin => true,
