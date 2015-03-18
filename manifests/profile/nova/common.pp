@@ -21,5 +21,14 @@ class iaas::profile::nova::common (
     mysql_module => '2.3',
   }
 
+  class { '::nova::network::neutron':
+    neutron_admin_password => $neutron_password,
+    neutron_region_name => $region,
+    neutron_admin_auth_url => "http://${endpoint}:35357/v2.0",
+    neutron_url => "http://${endpoint}:9696",
+    vif_plugging_is_fatal => false,
+    vif_plugging_timeout => '0',
+  }
+
   nova_config { 'DEFAULT/default_floating_pool': value => 'public' }
 }

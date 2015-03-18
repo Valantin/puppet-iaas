@@ -22,14 +22,6 @@ class iaas::profile::nova::compute (
   }
 
   class { '::nova::compute::neutron': }
-  class { '::nova::network::neutron':
-    neutron_admin_password => $neutron_password,
-    neutron_region_name    => $region,
-    neutron_admin_auth_url => "http://${endpoint}:35357/v2.0",
-    neutron_url            => "http://${endpoint}:9696",
-    vif_plugging_is_fatal  => false,
-    vif_plugging_timeout   => '0',
-  }
 
   class { '::nova::compute::libvirt':
     libvirt_virt_type => 'kvm',
