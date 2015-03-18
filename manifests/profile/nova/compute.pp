@@ -19,6 +19,7 @@ class iaas::profile::nova::compute (
     vnc_enabled => true,
     vncserver_proxyclient_address => $::facts["ipaddress_${admin_interface}"],
     vncproxy_host => $endpoint,
+    vnc_keymap => 'fr',
   }
 
   class { '::nova::compute::neutron': }
