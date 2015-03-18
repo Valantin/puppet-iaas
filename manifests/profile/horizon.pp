@@ -12,6 +12,14 @@ class iaas::profile::horizon (
     secret_key => $secret,
     cache_server_ip => $::facts["ipaddress_${admin_interface}"],
     keystone_url => "http://${endpoint_address}:5000/v2.0",
+    cinder_options => {
+      'enable_backup' => true,
+    },
+    neutron_options => {
+      'enable_lb' => true,
+      'enable_firewall' => true,
+      'enable_vpn' => true,
+    },
   }
 
   @@haproxy::balancermember { "horizon_${::fqdn}":
