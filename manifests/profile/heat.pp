@@ -41,8 +41,8 @@ class iaas::profile::heat (
   @@haproxy::balancermember { "heat_api_${::fqdn}":
     listening_service => 'heat_api_cluster',
     server_names => $::hostname,
-    ports => '8000',
     ipaddresses => $::facts["ipaddress_${public_interface}"],
+    ports => '8004',
     options => 'check inter 2000 rise 2 fall 5',
   }
 }
