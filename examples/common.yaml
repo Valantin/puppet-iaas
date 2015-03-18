@@ -50,23 +50,25 @@ iaas::profile::rabbitmq::erlang: GWFFDKEXVWEMGMFLSFQX
 # Keystone
 iaas::profile::keystone::admin_token: '36c428a03be7d4f3cb0c'
 
-iaas::profile::keystone::admin_email: 'me@quentin-machu.fr'
-iaas::profile::keystone::admin_password: 'keystone'
-
 iaas::profile::keystone::tenants:
-    "test":
-        description: "Test tenant"
+    "demofoo":
+        description: "Demo/Foobar Corp."
 
 iaas::profile::keystone::users:
-    "test":
-        password: "test"
-        tenant: "test"
-        email: "test@example.com"
+    "admin":
+        password: "admin"
+        tenant: "admin"
+        email: "admin@iaas.io"
         admin: true
     "demo":
         password: "demo"
-        tenant: "test"
-        email: "demo@example.com"
+        tenant: "demofoo"
+        email: "demo@demo.com"
+        admin: false
+    "foo":
+        password: "bar"
+        tenant: "demofoo"
+        email: "foo@bar.com"
         admin: false
 
 # Glance

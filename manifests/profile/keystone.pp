@@ -22,12 +22,6 @@ class iaas::profile::keystone (
     database_idle_timeout => 3,
   }
 
-  class { '::keystone::roles::admin':
-    email => $admin_email,
-    password => $admin_password,
-    admin_tenant => 'admin',
-  }
-
   class { 'keystone::endpoint':
     public_url => "http://${endpoint}:5000",
     admin_url => "http://${endpoint}:35357",
