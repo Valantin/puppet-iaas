@@ -10,10 +10,9 @@ iaas::profile::base::ssh_public_key: ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAgEAo/JkbGO
 iaas::profile::base::ntp_servers: [puppet]
 
 # Endpoints
-iaas::role::endpoint::servers: [endpoint-1, endpoint-2]
-iaas::role::endpoint::main_hostname: 'endpoint-1'
-iaas::role::endpoint::main_address: endpoint-1 # The main address used to access the cluster / the load-balancers ;; should point to the dns round-robin for endpoints
-iaas::role::endpoint::haproxy_port: [8140]
+iaas::role::endpoint::servers: [endpoint-1, endpoint-2] # List of load-balancers
+iaas::role::endpoint::main_hostname: 'endpoint-2'
+iaas::role::endpoint::main_address: endpoint-2 # The main virtual address pointing to the load-balancers
 
 iaas::profile::haproxy::stats_enabled: true
 iaas::profile::haproxy::stats_ports: [1936]
@@ -27,7 +26,7 @@ iaas::profile::database::servers: [controller-1, controller-2, controller-3]
 iaas::profile:database::galera_master: controller-1
 iaas::profile:database::galera_password: test
 
-iaas::mysql::allowed_hosts: ["%"] # Remove % in production env and replace by something like : endpoint-1, endpoint-2
+iaas::mysql::allowed_hosts: ["endpoint-1", "endpoint-2"]
 iaas::mysql::keystone::user: keystone
 iaas::mysql::keystone::password: keystone
 iaas::mysql::glance::user: glance
@@ -44,7 +43,7 @@ iaas::mysql::heat::password: heat
 # Rabbitmq
 iaas::profile::rabbitmq::servers: [controller-1, controller-2, controller-3]
 iaas::profile::rabbitmq::user: openstack
-iaas::profile::rabbitmq::password: iaas
+iaas::profile::rabbitmq::password: openstack
 iaas::profile::rabbitmq::erlang: GWFFDKEXVWEMGMFLSFQX
 
 # Keystone

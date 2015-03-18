@@ -21,18 +21,18 @@ This Puppet module allows deploying a highly-available installation of OpenStack
 
 Four types of nodes are created for the deployment :
 
-* Endpoint nodes that host load balancers and L2/L3 (Open vSwitch) routing and DHCP services 
-* Controller nodes that hosts API services, databases, message queues, caches, and every 
+* Endpoint nodes that host load balancers and L2/L3 (Open vSwitch) routing and DHCP services
+* Controller nodes that hosts API services, databases, message queues, caches, and every
 * Storage nodes that hosts volumes, image storage, objects using Ceph
 * Compute nodes to run guest operating systems
 
 ## Setup
 
 ### Setup Requirements
-This module assumes nodes running Ubuntu 14.04 (Trusty) with either Puppet Enterprise or Puppet. Puppet must have pluginsync and storeconfigs enabled.
+This module assumes nodes running Ubuntu 14.04 (Trusty) with either Puppet Enterprise or Puppet. Puppet must have pluginsync, trusted_node_data and storeconfigs enabled.
 
 This module depends on Hiera.
- 
+
 ### Beginning with puppet-iaas
 To ensure high availability, three storage nodes, three controller nodes and two endpoint nodes must be deployed, be sure to have eight available servers.
 

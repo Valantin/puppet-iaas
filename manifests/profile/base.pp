@@ -8,14 +8,12 @@ class iaas::profile::base (
   sysctl { 'net.ipv4.tcp_keepalive_time': value => '30' }
   sysctl { 'net.ipv4.tcp_keepalive_intvl': value => '15' }
 
-  # Apt repo
+  # Ubuntu repository for OpenStack Juno
   apt::source { 'ubuntu-cloud-archive':
     location => 'http://ubuntu-cloud.archive.canonical.com/ubuntu',
     release => "${::lsbdistcodename}-updates/juno",
     repos => 'main',
     required_packages => 'ubuntu-cloud-keyring',
-  } -> exec { "apt_upgrade":
-    command => "apt-get update && apt-get -y upgrade"
   }
 
   # Locales
@@ -50,10 +48,6 @@ class iaas::profile::base (
       'PermitRootLogin'        => 'yes',
       'Port'                   => [22],
     }
-  } ~>
-  exec { 'sshd_restart':
-    command => '/etc/init.d/ssh restart',
-    returns => [0, 1]
   }
   file { "/root/.ssh":
     ensure => "directory",
@@ -66,10 +60,5 @@ class iaas::profile::base (
     group => root,
     mode => 644,
     content => $ssh_public_key
-  }
-
-  # Puppet
-  service { "puppet":
-    ensure => "running",
   }
 }
