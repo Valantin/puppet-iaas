@@ -4,44 +4,54 @@
 forge "https://forge.puppetlabs.com"
 
 # Role base
-mod 'puppetlabs-ntp',
+mod 'ntp',
     :git => 'https://github.com/puppetlabs/puppetlabs-ntp.git'
-mod 'saz-ssh',
+mod 'concat', #Required by ssh
+    :git => 'https://github.com/puppetlabs/puppetlabs-concat.git'
+mod 'ssh',
     :git => 'https://github.com/saz/puppet-ssh.git'
-mod 'saz-resolv_conf',
+mod 'resolv_conf',
     :git => 'https://github.com/saz/puppet-resolv_conf.git'
-mod 'saz-memcached',
+mod 'memcached',
     :git => 'https://github.com/saz/puppet-memcached.git'
-mod 'saz-locales',
+mod 'locales',
     :git => 'https://github.com/saz/puppet-locales.git'
-mod 'camptocamp-kmod',
+mod 'kmod',
     :git => 'https://github.com/camptocamp/puppet-kmod.git'
-mod 'adrien-network',
+mod 'network',
     :git => 'https://github.com/puppet-community/puppet-network.git'
-mod 'puppetlabs-apt',
+mod 'apt',
     :git => 'https://github.com/puppetlabs/puppetlabs-apt.git'
+mod 'inifiles',
+    :git => 'https://github.com/puppetlabs/puppetlabs-inifile.git'
+mod 'xinetd',
+    :git => 'https://github.com/puppetlabs/puppetlabs-xinetd.git'
+mod 'staging',
+    :git => 'https://github.com/nanliu/puppet-staging.git'
+mod 'stdlib',
+    :git => 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
 
 # Role Controller
-mod 'puppetlabs-mysql',
+mod 'mysql', # Required by galera
     :git => 'https://github.com/puppetlabs/puppetlabs-mysql.git',
     :ref => '2.3.0' # This is only required because of https://github.com/michaeltchapman/puppet-galera/pull/22
-mod 'michaeltchapman-galera',
+mod 'galera',
     :git => 'https://github.com/michaeltchapman/puppet-galera.git'
-mod 'garethr-erlang', # Required by rabbitmq
+mod 'erlang', # Required by rabbitmq
     :git => 'https://github.com/garethr/garethr-erlang.git'
-mod 'puppetlabs-rabbitmq',
+mod 'rabbitmq',
     :git => 'https://github.com/puppetlabs/puppetlabs-rabbitmq.git'
-mod 'puppetlabs-apache', #Required by horizon
+mod 'apache', #Required by horizon
 :git => 'https://github.com/puppetlabs/puppetlabs-apache.git'
 
 # Role Storage
-mod 'stackforge-ceph',
+mod 'ceph',
     :git => 'https://github.com/stackforge/puppet-ceph.git'
 
 # Role Endpoint
-mod 'puppetlabs-haproxy',
+mod 'haproxy',
     :git => 'https://github.com/puppetlabs/puppetlabs-haproxy.git'
-mod 'thias-sysctl',
+mod 'sysctl',
     :git => 'https://github.com/thias/puppet-sysctl.git'
 
 ## The core OpenStack modules
@@ -83,6 +93,10 @@ mod "horizon",
 
 mod "openstacklib",
   :git => "git://github.com/stackforge/puppet-openstacklib",
+  :ref => "master"
+
+mod "vcsrepo", # Required by Tempest
+  :git => "git://github.com/puppetlabs/puppetlabs-vcsrepo.git",
   :ref => "master"
 
 mod "tempest",
