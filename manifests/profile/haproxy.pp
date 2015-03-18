@@ -94,6 +94,15 @@ class iaas::profile::haproxy {
     }
   }
 
+  haproxy::listen { 'nova_metadata_api_cluster':
+    ipaddress => '0.0.0.0',
+    ports => '8775',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+      'balance' => 'source',
+    }
+  }
+
   haproxy::listen { 'nova_novncproxy':
     ipaddress => '0.0.0.0',
     mode => 'tcp',

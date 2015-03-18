@@ -47,6 +47,14 @@ class iaas::profile::nova::controller (
     options => 'check inter 2000 rise 2 fall 5',
   }
 
+  @@haproxy::balancermember { "nova_metadata_api_${::fqdn}":
+    listening_service => 'nova_metadata_api_cluster',
+    server_names => $::hostname,
+    ipaddresses => $::facts["ipaddress_${admin_interface}"],
+    ports => '8775',
+    options => 'check inter 2000 rise 2 fall 5',
+  }
+
   @@haproxy::balancermember { "nova_novncproxy_${::fqdn}":
     listening_service => 'nova_novncproxy',
     server_names => $::hostname,
