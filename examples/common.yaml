@@ -128,3 +128,15 @@ iaas::profile::heat::encryption_key: heat
 
 # Heat
 iaas::profile::horizon::secret: horizon
+
+# Tempest
+iaas::profile::tempest::admin_user: admin
+iaas::profile::tempest::user: demo
+iaas::profile::tempest::alt_user: foo
+iaas::profile::tempest::image_id: 5d912738-72df-4379-add1-de88d80d012a
+iaas::profile::tempest::alt_image_id: 557fdbe9-0cd1-4abd-8ce0-09e9c7f40745
+iaas::profile::tempest::flavor_ref: 1
+iaas::profile::tempest::alt_flavor_ref: 2
+iaas::profile::tempest::image_ssh_user: cirros
+iaas::profile::tempest::alt_image_ssh_user: root
+iaas::profile::tempest::public_network_id: 4c02888a-aa76-4438-bfbe-9b7c3ba98a52
