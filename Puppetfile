@@ -1,58 +1,58 @@
 #!/usr/bin/env ruby
 #^syntax detection
 
-forge "https://forge.puppetlabs.com"
+forge "git://forge.puppetlabs.com"
 
 # Role base
 mod 'ntp',
-    :git => 'https://github.com/puppetlabs/puppetlabs-ntp.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-ntp'
 mod 'concat', #Required by ssh
-    :git => 'https://github.com/puppetlabs/puppetlabs-concat.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-concat'
 mod 'ssh',
-    :git => 'https://github.com/saz/puppet-ssh.git'
+    :git => 'git://github.com/saz/puppet-ssh'
 mod 'resolv_conf',
-    :git => 'https://github.com/saz/puppet-resolv_conf.git'
+    :git => 'git://github.com/saz/puppet-resolv_conf'
 mod 'memcached',
-    :git => 'https://github.com/saz/puppet-memcached.git'
+    :git => 'git://github.com/saz/puppet-memcached'
 mod 'locales',
-    :git => 'https://github.com/saz/puppet-locales.git'
+    :git => 'git://github.com/saz/puppet-locales'
 mod 'kmod',
-    :git => 'https://github.com/camptocamp/puppet-kmod.git'
+    :git => 'git://github.com/camptocamp/puppet-kmod'
 mod 'network',
-    :git => 'https://github.com/puppet-community/puppet-network.git'
+    :git => 'git://github.com/puppet-community/puppet-network'
 mod 'apt',
-    :git => 'https://github.com/puppetlabs/puppetlabs-apt.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-apt'
 mod 'inifiles',
-    :git => 'https://github.com/puppetlabs/puppetlabs-inifile.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-inifile'
 mod 'xinetd',
-    :git => 'https://github.com/puppetlabs/puppetlabs-xinetd.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-xinetd'
 mod 'staging',
-    :git => 'https://github.com/nanliu/puppet-staging.git'
+    :git => 'git://github.com/nanliu/puppet-staging'
 mod 'stdlib',
-    :git => 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-stdlib'
 
 # Role Controller
 mod 'mysql', # Required by galera
-    :git => 'https://github.com/puppetlabs/puppetlabs-mysql.git',
-    :ref => '2.3.0' # This is only required because of https://github.com/michaeltchapman/puppet-galera/pull/22
+    :git => 'git://github.com/puppetlabs/puppetlabs-mysql',
+    :ref => '2.3.0' # This is only required because of git://github.com/michaeltchapman/puppet-galera/pull/22
 mod 'galera',
-    :git => 'https://github.com/michaeltchapman/puppet-galera.git'
+    :git => 'git://github.com/michaeltchapman/puppet-galera'
 mod 'erlang', # Required by rabbitmq
-    :git => 'https://github.com/garethr/garethr-erlang.git'
+    :git => 'git://github.com/garethr/garethr-erlang'
 mod 'rabbitmq',
-    :git => 'https://github.com/puppetlabs/puppetlabs-rabbitmq.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-rabbitmq'
 mod 'apache', #Required by horizon
-:git => 'https://github.com/puppetlabs/puppetlabs-apache.git'
+:git => 'git://github.com/puppetlabs/puppetlabs-apache'
 
 # Role Storage
 mod 'ceph',
-    :git => 'https://github.com/stackforge/puppet-ceph.git'
+    :git => 'git://github.com/stackforge/puppet-ceph'
 
 # Role Endpoint
 mod 'haproxy',
-    :git => 'https://github.com/puppetlabs/puppetlabs-haproxy.git'
+    :git => 'git://github.com/puppetlabs/puppetlabs-haproxy'
 mod 'sysctl',
-    :git => 'https://github.com/thias/puppet-sysctl.git'
+    :git => 'git://github.com/thias/puppet-sysctl'
 
 ## The core OpenStack modules
 mod "keystone",
@@ -96,7 +96,7 @@ mod "openstacklib",
   :ref => "master"
 
 mod "vcsrepo", # Required by Tempest
-  :git => "git://github.com/puppetlabs/puppetlabs-vcsrepo.git",
+  :git => "git://github.com/puppetlabs/puppetlabs-vcsrepo",
   :ref => "master"
 
 mod "tempest",
