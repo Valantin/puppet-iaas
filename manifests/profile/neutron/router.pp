@@ -15,6 +15,11 @@ class iaas::profile::neutron::router (
   sysctl { 'net.ipv4.conf.all.rp_filter': value => '0' }
   sysctl { 'net.ipv4.conf.default.rp_filter': value => '0' }
 
+  sysctl { 'net.ipv4.conf.all.accept_redirects': value => '0' }
+  sysctl { 'net.ipv4.conf.default.accept_redirects': value => '0' }
+  sysctl { 'net.ipv4.conf.all.send_redirects': value => '0' }
+  sysctl { 'net.ipv4.conf.default.send_redirects': value => '0' }
+
   package { 'ifupdown-extra': }
 
   include iaas::profile::neutron::common
@@ -24,6 +29,7 @@ class iaas::profile::neutron::router (
     use_namespaces => true,
     router_delete_namespaces => true,
     ha_enabled => true,
+    enabled => false,
   }
 
   class { '::neutron::agents::dhcp':
@@ -33,9 +39,11 @@ class iaas::profile::neutron::router (
   }
 
   class { '::neutron::agents::lbaas': }
-  class { '::neutron::agents::vpnaas': }
   class { '::neutron::agents::metering': }
   class { '::neutron::services::fwaas': }
+  class { '::neutron::agents::vpnaas':
+    external_network_bridge => "br-ex",
+  }
 
   class { '::neutron::agents::metadata':
     auth_password => $neutron_password,
