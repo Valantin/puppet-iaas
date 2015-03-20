@@ -45,7 +45,6 @@ class iaas::profile::haproxy (
     ports => '3306',
     options => {
       'option' => ['httpchk'],
-      'balance' => 'source',
     }
   }
 
@@ -55,7 +54,6 @@ class iaas::profile::haproxy (
     ports => '5672',
     options => {
       'option' => ['tcpka'],
-      'balance' => 'source',
       'timeout' => [
         'client 7d',
         'server 7d',
@@ -67,7 +65,6 @@ class iaas::profile::haproxy (
     ports => '35357',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -76,7 +73,6 @@ class iaas::profile::haproxy (
     ports => '5000',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -85,7 +81,6 @@ class iaas::profile::haproxy (
     ports => '9292',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -94,7 +89,6 @@ class iaas::profile::haproxy (
     ports => '9191',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
       'http-check' => 'expect status 401',
     }
   }
@@ -104,7 +98,6 @@ class iaas::profile::haproxy (
     ports => '8776',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -113,7 +106,6 @@ class iaas::profile::haproxy (
     ports => '8774',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -122,7 +114,6 @@ class iaas::profile::haproxy (
     ports => '8775',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -131,7 +122,6 @@ class iaas::profile::haproxy (
     ports => '6080',
     options => {
       'option' => ['tcpka', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -140,7 +130,6 @@ class iaas::profile::haproxy (
     ports => '9696',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -149,7 +138,6 @@ class iaas::profile::haproxy (
     ports => '8004',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 
@@ -158,7 +146,6 @@ class iaas::profile::haproxy (
     ports => '80',
     options => {
       'option' => ['tcpka', 'httpchk', 'tcplog'],
-      'balance' => 'source',
     }
   }
 }
