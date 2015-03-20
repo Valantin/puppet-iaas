@@ -2,12 +2,17 @@ class iaas::profile::database (
   $servers = undef,
   $galera_master = undef,
   $galera_password = undef,
+
+  $max_connections = 1024,
 ) {
   class { 'galera':
     galera_servers => $servers,
     galera_master => $galera_master,
     root_password => $galera_password,
     configure_firewall => false,
+    override_options => {
+      'mysqld' => { 'max_connections' => "${max_connections}" }
+    }
   } -> Service['mysqld'] -> anchor { 'database-service': }
 
   @@haproxy::balancermember { "galera_${::fqdn}":
