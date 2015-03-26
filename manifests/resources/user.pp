@@ -16,12 +16,12 @@ define iaas::resources::user (
   if $admin == true {
     keystone_user_role { "${name}@${tenant}":
       ensure => present,
-      roles  => ['_member_', 'admin'],
+      roles  => ['heat_stack_owner', '_member_', 'admin'],
     }
   } else {
     keystone_user_role { "${name}@${tenant}":
       ensure => present,
-      roles  => ['_member_'],
+      roles  => ['heat_stack_owner', '_member_'],
     }
   }
 }
