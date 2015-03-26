@@ -1,6 +1,7 @@
 class iaas::profile::nova::common (
   $public_interface = hiera('iaas::public_interface', undef),
 
+  $default_flotting_pool = undef,
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $nova_password = hiera('iaas::profile::nova::controller::password', undef),
 
@@ -31,5 +32,5 @@ class iaas::profile::nova::common (
     vif_plugging_timeout => '0',
   }
 
-  nova_config { 'DEFAULT/default_floating_pool': value => 'public' }
+  nova_config { 'DEFAULT/default_floating_pool': value => $default_flotting_pool }
 }

@@ -107,6 +107,7 @@ ceph::keys::args:
     cap_osd: allow class-read object_prefix rbd_children, allow rwx pool=images
 
 # Nova
+iaas::profile::nova::common::default_flotting_pool: ext-net
 iaas::profile::nova::controller::password: nova
 
 # Neutron
