@@ -19,6 +19,21 @@ class iaas::profile::heat (
     region           => $region,
   }
 
+  # Run Heat w/ Keystone V2
+  package { 'git':
+    name => 'git',
+    ensure => 'present'
+  }
+  exec { 'heat_keystoneclient_v2':
+    command => 'git clone https://github.com/openstack/heat.git /tmp/heat && cd /tmp/heat/contrib/heat_keystoneclient_v2/ && python setup.py install && rm -rf /tmp/heat',
+    creates => '/usr/local/lib/heat/heat_keystoneclient_v2',
+    require => Package['git'],
+  }
+  heat_config {
+    'DEFAULT/plugin_dirs': value => "=/usr/lib64/heat,/usr/lib/heat,/usr/local/lib/heat";
+    'DEFAULT/keystone_backend': value => "heat.engine.plugins.heat_keystoneclient_v2.client.KeystoneClientV2";
+  }
+
   class { '::heat':
     database_connection => $iaas::resources::connectors::heat,
     rabbit_host         => $endpoint,
