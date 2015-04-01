@@ -69,7 +69,8 @@ class iaas::profile::tempest (
     neutron_available => true,
     nova_available => true,
     swift_available => false,
-
+    ceilometer_available => true,
+    
     configure_images => true,
     image_ref => $image_id,
     image_ref_alt => $alt_image_id,

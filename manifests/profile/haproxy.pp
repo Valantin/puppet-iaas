@@ -148,4 +148,13 @@ class iaas::profile::haproxy (
       'option' => ['tcpka', 'httpchk', 'tcplog'],
     }
   }
+
+  haproxy::listen { 'ceilometer_api_cluster':
+    ipaddress => '0.0.0.0',
+    ports => '8777',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+      'http-check' => 'expect status 401',
+    }
+  }
 }

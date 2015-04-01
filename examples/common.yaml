@@ -39,6 +39,8 @@ iaas::mysql::neutron::user: neutron
 iaas::mysql::neutron::password: neutron
 iaas::mysql::heat::user: heat
 iaas::mysql::heat::password: heat
+iaas::mysql::ceilometer::user: ceilometer
+iaas::mysql::ceilometer::password: ceilometer
 
 # Rabbitmq
 iaas::profile::rabbitmq::servers: [controller-1, controller-2, controller-3]
@@ -129,6 +131,11 @@ iaas::profile::heat::encryption_key: 12345678912345678912345678912345 # https://
 
 # Heat
 iaas::profile::horizon::secret: horizon
+
+# Ceilometer
+iaas::profile::ceilometer::servers: ["controller-1:2888:3888", "controller-2:2888:3888", "controller-3:2888:3888"]
+iaas::profile::ceilometer::secret: ceilometer
+iaas::profile::ceilometer::password: ceilometer
 
 # Tempest
 iaas::profile::tempest::admin_user: admin

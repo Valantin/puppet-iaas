@@ -21,3 +21,6 @@ ceph::keys::args:
     user: cinder
     group: cinder
     mode: '0550'
+
+# Zookeeper
+iaas::profile::ceilometer::controller::zookeeper_id: 1 # Unique & between 1-255

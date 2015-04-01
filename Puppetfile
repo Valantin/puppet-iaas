@@ -42,7 +42,11 @@ mod 'erlang', # Required by rabbitmq
 mod 'rabbitmq',
     :git => 'git://github.com/puppetlabs/puppetlabs-rabbitmq'
 mod 'apache', #Required by horizon
-:git => 'git://github.com/puppetlabs/puppetlabs-apache'
+    :git => 'git://github.com/puppetlabs/puppetlabs-apache'
+mod 'deric/zookeeper',
+    :git => 'git://github.com/deric/puppet-zookeeper'
+mod 'richardc/datacat', #Required by zookeeper
+    :git => 'git://github.com/richardc/puppet-datacat'
 
 # Role Storage
 mod 'ceph',

@@ -24,4 +24,8 @@ class iaas::resources::connectors {
   $user_heat = hiera('iaas::mysql::heat::user', 'heat')
   $pass_heat = hiera('iaas::mysql::heat::password', 'heat')
   $heat = "mysql://${user_heat}:${pass_heat}@${endpoint}/heat"
+
+  $user_ceilometer = hiera('iaas::mysql::ceilometer::user', 'ceilometer')
+  $pass_ceilometer = hiera('iaas::mysql::ceilometer::password', 'ceilometer')
+  $ceilometer = "mysql://${user_ceilometer}:${pass_ceilometer}@${endpoint}/ceilometer"
 }
