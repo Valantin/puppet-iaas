@@ -10,6 +10,8 @@ class iaas::profile::neutron::router (
 
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
+
+  $mtu = 1438,
 ) {
   sysctl { 'net.ipv4.ip_forward': value => '1' }
   sysctl { 'net.ipv4.conf.all.rp_filter': value => '0' }
@@ -36,6 +38,13 @@ class iaas::profile::neutron::router (
     dhcp_delete_namespaces => true,
     enable_isolated_metadata => true,
     enable_metadata_network => true,
+    dnsmasq_config_file => "/etc/neutron/dnsmasq-neutron.conf",
+  }
+  file { '/etc/neutron/dnsmasq-neutron.conf':
+    owner => root,
+    group => root,
+    mode  => 644,
+    content => "dhcp-option-force=26,${mtu}"
   }
 
   class { '::neutron::agents::vpnaas':
