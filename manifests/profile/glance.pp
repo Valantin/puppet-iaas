@@ -24,7 +24,7 @@ class iaas::profile::glance (
     mysql_module => '2.3',
     database_idle_timeout => 3,
     os_region_name => $region,
-    known_stores => ['rbd'],
+    known_stores => ['glance.store.filesystem.Store', 'glance.store.http.Store', 'glance.store.rbd.Store', 'glance.store.cinder.Store'], #  'glance.store.sheepdog.Store', 'glance.store.vmware_datastore.Store', 'glance.store.s3.Store', 'glance.store.swift.Store'
     show_image_direct_url => true,
     pipeline => 'keystone',
   }
