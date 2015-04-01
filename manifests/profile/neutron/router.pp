@@ -38,11 +38,13 @@ class iaas::profile::neutron::router (
     enable_metadata_network => true,
   }
 
-  class { '::neutron::agents::lbaas': }
-  class { '::neutron::agents::metering': }
-  class { '::neutron::services::fwaas': }
   class { '::neutron::agents::vpnaas':
     external_network_bridge => "br-ex",
+  }
+  class { '::neutron::agents::lbaas': }
+  class { '::neutron::agents::metering': }
+  class { '::neutron::services::fwaas':
+    vpnaas_agent_package => true
   }
 
   class { '::neutron::agents::metadata':
