@@ -35,7 +35,7 @@ class iaas::profile::nova::controller (
     host => $::facts["ipaddress_${admin_interface}"],
   }
 
-  class { [ 'nova::scheduler', 'nova::consoleauth', 'nova::conductor']:
+  class { [ 'nova::scheduler', 'nova::consoleauth', 'nova::conductor', 'nova::cert']:
     enabled => true,
   }
 
