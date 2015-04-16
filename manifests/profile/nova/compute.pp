@@ -39,6 +39,9 @@ class iaas::profile::nova::compute (
     libvirt_images_rbd_pool => 'vms',
     libvirt_rbd_secret_uuid => $cinder_secret,
     rbd_keyring => 'client.cinder'
-    #TODO Add live_migration_flag="VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST"
+  }
+
+  nova_config {
+    'libvirt/libvirt_live_migration_flag': value => 'VIR_MIGRATE_UNDEFINE_SOURCE,VIR_MIGRATE_PEER2PEER,VIR_MIGRATE_LIVE,VIR_MIGRATE_PERSIST_DEST';
   }
 }
