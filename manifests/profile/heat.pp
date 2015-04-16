@@ -12,45 +12,55 @@ class iaas::profile::heat (
   iaas::resources::database { 'heat': }
 
   class { '::heat::keystone::auth':
-    password         => $password,
-    public_address   => $endpoint,
-    admin_address    => $endpoint,
+    password => $password,
+    public_address => $endpoint,
+    admin_address => $endpoint,
     internal_address => $endpoint,
-    region           => $region,
+    region => $region,
   }
-
-  # Run Heat w/ Keystone V2
-  package { 'git':
-    name => 'git',
-    ensure => 'present'
-  }
-  exec { 'heat_keystoneclient_v2':
-    command => 'git clone https://github.com/openstack/heat.git /tmp/heat && cd /tmp/heat/contrib/heat_keystoneclient_v2/ && python setup.py install && rm -rf /tmp/heat',
-    creates => '/usr/local/lib/heat/heat_keystoneclient_v2',
-    require => Package['git'],
-  }
-  heat_config {
-    'DEFAULT/plugin_dirs': value => "=/usr/lib64/heat,/usr/lib/heat,/usr/local/lib/heat";
-    'DEFAULT/keystone_backend': value => "heat.engine.plugins.heat_keystoneclient_v2.client.KeystoneClientV2";
+  class { '::heat::keystone::auth_cfn':
+    password => $password,
+    public_address => $endpoint,
+    admin_address => $endpoint,
+    internal_address => $endpoint,
+    region => $region,
   }
 
   class { '::heat':
     database_connection => $iaas::resources::connectors::heat,
-    rabbit_host         => $endpoint,
-    rabbit_userid       => $rabbitmq_user,
-    rabbit_password     => $rabbitmq_password,
-    keystone_host       => $endpoint,
-    keystone_password   => $password,
-    mysql_module        => '2.3',
+    rabbit_host => $endpoint,
+    rabbit_userid => $rabbitmq_user,
+    rabbit_password => $rabbitmq_password,
+    auth_uri => "http://${endpoint}:5000/v2.0",
+    identity_uri => "http://${endpoint}:35357",
+    keystone_password => $password,
+    mysql_module => '2.3',
     database_idle_timeout => 3,
+    region_name => $region,
   }
 
-  class { '::heat::api':
-    bind_host => $::facts["ipaddress_${public_interface}"],
-  }
+  class { '::heat::api': }
+  class { '::heat::api_cfn': }
+  class { '::heat::api_cloudwatch': }
 
   class { '::heat::engine':
     auth_encryption_key => $encryption_key,
+  }
+
+  file { "/usr/bin/heat-keystone-setup-domain":
+      mode   => 550,
+      owner  => root,
+      group  => root,
+      source => "puppet:///modules/iaas/heat-keystone-setup-domain"
+  } ->
+  class { 'heat::keystone::domain':
+    auth_url => "http://${endpoint}:5000/v2.0",
+    keystone_admin => "heat",
+    keystone_password => $password,
+    keystone_tenant   => "services",
+    domain_name => 'heat',
+    domain_admin => 'heat_admin',
+    domain_password => 'heat_admin',
   }
 
   @@haproxy::balancermember { "heat_api_${::fqdn}":
@@ -58,6 +68,22 @@ class iaas::profile::heat (
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
     ports => '8004',
+    options => 'check inter 2000 rise 2 fall 5',
+  }
+
+  @@haproxy::balancermember { "heat_api_cfn_${::fqdn}":
+    listening_service => 'heat_api_cfn_cluster',
+    server_names => $::hostname,
+    ipaddresses => $::facts["ipaddress_${public_interface}"],
+    ports => '8000',
+    options => 'check inter 2000 rise 2 fall 5',
+  }
+
+  @@haproxy::balancermember { "heat_api_cw_${::fqdn}":
+    listening_service => 'heat_api_cw_cluster',
+    server_names => $::hostname,
+    ipaddresses => $::facts["ipaddress_${public_interface}"],
+    ports => '8003',
     options => 'check inter 2000 rise 2 fall 5',
   }
 }

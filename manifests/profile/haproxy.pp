@@ -141,6 +141,22 @@ class iaas::profile::haproxy (
     }
   }
 
+  haproxy::listen { 'heat_api_cfn_cluster':
+    ipaddress => '0.0.0.0',
+    ports => '8000',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+    }
+  }
+
+  haproxy::listen { 'heat_api_cw_cluster':
+    ipaddress => '0.0.0.0',
+    ports => '8003',
+    options => {
+      'option' => ['tcpka', 'httpchk', 'tcplog'],
+    }
+  }
+
   haproxy::listen { 'horizon_cluster':
     ipaddress => '0.0.0.0',
     ports => '80',
