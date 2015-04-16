@@ -19,4 +19,9 @@ class iaas::profile::ceilometer::common (
     auth_password => $password,
     auth_region => $region,
   }
+
+  # Change default polling interval from 10min to 0.5m for all sources
+  exec { 'ceilometer_pipeline_interval':
+    command => "sed -i 's/interval: 600$/interval: 30/' /etc/ceilometer/pipeline.yaml",
+  }
 }
