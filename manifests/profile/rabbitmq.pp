@@ -20,7 +20,7 @@ class iaas::profile::rabbitmq (
     cluster_node_type => 'ram',
     wipe_db_on_cookie_change => true,
     cluster_partition_handling => 'pause_minority',
-    tcp_keepalive => true, #FIXME May cause connectivity issues with OpenStack in some configurations
+    config_variables => { 'tcp_listen_options' => "[binary, {packet, raw}, {reuseaddr, true}, {backlog, 128}, {nodelay, true}, {exit_on_close, false}, {keepalive, true}]" },
   } ->
   rabbitmq_user { $user:
     admin => true,
@@ -33,9 +33,14 @@ class iaas::profile::rabbitmq (
     read_permission => '.*',
     provider => 'rabbitmqctl',
   } ->
-  exec { 'rabbitmq_ha_queues':
-    command => "rabbitmqctl set_policy ha-all \"^.*\" \'{\"ha-mode\":\"all\"}\'",
-    unless => "rabbitmqctl list_policies | grep ha-all"
+  rabbitmq_policy { 'ha-all@/':
+    pattern => '.*',
+    priority => 0,
+    applyto => 'all',
+    definition => {
+      'ha-mode' => 'all',
+      'ha-sync-mode' => 'automatic',
+    },
   }
 
   @@haproxy::balancermember { "rabbitmq_${::fqdn}":
