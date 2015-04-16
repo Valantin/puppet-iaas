@@ -9,6 +9,8 @@ class iaas::profile::tempest (
   $image_ssh_user = undef,
   $alt_image_ssh_user = undef,
   $public_network_id = undef,
+  $public_network_name = undef,
+  $floating_ip_range = undef,
 
   $neutron_password = hiera('iaas::profile::neutron::password', undef),
   $glance_password = hiera('iaas::profile::glance::password', undef),
@@ -106,9 +108,29 @@ class iaas::profile::tempest (
     'dashboard/login_url':     value => "http://${endpoint}/horizon/auth/login/";
 
     'identity-feature-enabled/api_v3': value => "false";
+    'identity-feature-enabled/trust': value => "false";
     'identity/region': value => $region;
 
     'boto/s3_url': value => "";
     'boto/ec2_url': value => "";
+
+    'compute/fixed_network_name': value => $public_network_name;
+    'compute/floating_ip_range': value => $floating_ip_range;
+  }
+
+  # Remove unimplemented tests
+  # Yes I know that is dirty but I don't have so much time for this
+  exec { 'rm_tests_third_party_discovery':
+    command => "sed -i -e \"s/'.\/tempest\/thirdparty'//\" tempest/test_discover/test_discover.py"
+  }
+  file { 'rm_tests_third_party':
+    path => '/var/lib/tempest/tempest/thirdparty/',
+    ensure => absent,
+    force => true,
+  }
+  file { 'rm_tests_dvr':
+    path => '/var/lib/tempest/tempest/api/network/admin/test_routers_dvr.py',
+    ensure => absent,
+  }
   }
 }
