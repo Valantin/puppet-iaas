@@ -12,8 +12,6 @@ mod 'ssh',
     :git => 'git://github.com/saz/puppet-ssh'
 mod 'resolv_conf',
     :git => 'git://github.com/saz/puppet-resolv_conf'
-mod 'memcached',
-    :git => 'git://github.com/saz/puppet-memcached'
 mod 'locales',
     :git => 'git://github.com/saz/puppet-locales'
 mod 'kmod',

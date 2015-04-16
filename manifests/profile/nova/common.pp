@@ -15,7 +15,6 @@ class iaas::profile::nova::common (
   class { '::nova':
     database_connection => $iaas::resources::connectors::nova,
     glance_api_servers => [ "${endpoint}:9292" ],
-    memcached_servers => ['localhost:11211'],
     rabbit_host => $endpoint,
     rabbit_userid => $rabbitmq_user,
     rabbit_password => $rabbitmq_password,

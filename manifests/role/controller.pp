@@ -3,7 +3,6 @@ class iaas::role::controller {
   class { 'iaas::profile::base': } ->
   class { 'iaas::profile::database': } ->
   class { 'iaas::profile::rabbitmq': } ->
-  class { 'memcached': } ->
   class { 'iaas::profile::keystone': } ->
   class { 'iaas::profile::glance': } ->
   class { 'iaas::profile::cinder': } ->
