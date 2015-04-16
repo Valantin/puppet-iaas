@@ -27,8 +27,6 @@ class iaas::profile::nova::common (
     neutron_region_name => $region,
     neutron_admin_auth_url => "http://${endpoint}:35357/v2.0",
     neutron_url => "http://${endpoint}:9696",
-    vif_plugging_is_fatal => false,
-    vif_plugging_timeout => '0',
   }
 
   nova_config { 'DEFAULT/default_floating_pool': value => $default_flotting_pool }
