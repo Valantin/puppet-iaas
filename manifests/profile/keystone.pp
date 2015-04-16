@@ -39,6 +39,7 @@ class iaas::profile::keystone (
     ports => '35357',
     options => 'check inter 2000 rise 2 fall 5',
   }
+
   @@haproxy::balancermember { "keystone_public_internal_cluster_${::fqdn}":
     listening_service => 'keystone_public_internal_cluster',
     server_names => $::hostname,

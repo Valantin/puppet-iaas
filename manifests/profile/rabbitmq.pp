@@ -25,7 +25,6 @@ class iaas::profile::rabbitmq (
   rabbitmq_user { $user:
     admin => true,
     password => $password,
-    provider => 'rabbitmqctl',
   } ->
   rabbitmq_user_permissions { "${user}@/":
     configure_permission => '.*',

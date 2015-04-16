@@ -38,7 +38,7 @@ class iaas::profile::neutron::server (
     nova_url => "http://${endpoint}:8774/v2",
     nova_admin_auth_url => "http://${endpoint}:35357/v2.0",
     nova_admin_password => $nova_password,
-    nova_region_name    => $region,
+    nova_region_name => $region,
   }
 
   @@haproxy::balancermember { "neutron_api_${::fqdn}":

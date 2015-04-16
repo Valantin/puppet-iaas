@@ -26,40 +26,6 @@ class iaas::profile::tempest (
     ensure => present,
   }
 
-  ########################################################################
-  class { '::neutron':
-    allow_overlapping_ips => true,
-    rabbit_host => $endpoint,
-    rabbit_user => $rabbitmq_user,
-    rabbit_password => $rabbitmq_password,
-  }
-
-  class { '::neutron::keystone::auth':
-    password => $neutron_password,
-    public_address => $endpoint,
-    admin_address => $endpoint,
-    internal_address => $endpoint,
-    region => $region,
-  }
-
-  class { '::neutron::server':
-    auth_uri => "http://${endpoint}:5000/v2.0",
-    identity_uri => "http://${endpoint}:35357",
-    auth_password       => $neutron_password,
-    enabled             => false,
-    sync_db             => false,
-    mysql_module        => '2.3',
-  }
-  ########################################################################
-
-  class { '::glance::api':
-    keystone_password => $glance_password,
-    auth_uri => "http://${endpoint}:5000/v2.0",
-    identity_uri => "http://${endpoint}:35357",
-    registry_host => $endpoint,
-    os_region_name => $region,
-  }
-
   class { '::tempest':
     setup_venv => true,
     tempest_repo_revision => 'master',
@@ -72,7 +38,7 @@ class iaas::profile::tempest (
     nova_available => true,
     swift_available => false,
     ceilometer_available => true,
-    
+
     configure_images => true,
     image_ref => $image_id,
     image_ref_alt => $alt_image_id,
@@ -97,7 +63,7 @@ class iaas::profile::tempest (
   }
 
   Tempest_config {
-    path    => $::tempest::tempest_conf,
+    path => $::tempest::tempest_conf,
     require => File[$::tempest::tempest_conf],
   }
 

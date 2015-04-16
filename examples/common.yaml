@@ -129,7 +129,7 @@ iaas::profile::neutron::common::service_plugins:
 iaas::profile::heat::password: heat
 iaas::profile::heat::encryption_key: 12345678912345678912345678912345 # https://bugs.launchpad.net/heat/+bug/1415887: "AES key must be either 16, 24, or 32 bytes long"
 
-# Heat
+# Horizon
 iaas::profile::horizon::secret: horizon
 
 # Ceilometer

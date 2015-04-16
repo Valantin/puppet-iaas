@@ -5,8 +5,9 @@ class iaas::profile::base (
   $ntp_servers,
 ) {
   # Keep-alive values
-  sysctl { 'net.ipv4.tcp_keepalive_time': value => '30' }
-  sysctl { 'net.ipv4.tcp_keepalive_intvl': value => '15' }
+  sysctl { 'net.ipv4.tcp_keepalive_time': value => '5' }
+  sysctl { 'net.ipv4.tcp_keepalive_probes': value => '5' }
+  sysctl { 'net.ipv4.tcp_keepalive_intvl': value => '1' }
 
   # Ubuntu repository for OpenStack Juno
   apt::source { 'ubuntu-cloud-archive':
