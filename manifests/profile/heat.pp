@@ -4,7 +4,6 @@ class iaas::profile::heat (
   $public_interface = hiera('iaas::public_interface', undef),
 
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
 
   $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', 'guest'),
   $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', 'guest'),

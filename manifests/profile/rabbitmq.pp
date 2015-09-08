@@ -1,7 +1,7 @@
 class iaas::profile::rabbitmq (
   $admin_interface = hiera('iaas::admin_interface', undef),
 
-  $servers = undef,
+  $hosts = undef,
   $user = undef,
   $password = undef,
   $erlang = undef,
@@ -15,7 +15,7 @@ class iaas::profile::rabbitmq (
     port => 5672,
     delete_guest_user => true,
     config_cluster => true,
-    cluster_nodes => $servers,
+    cluster_nodes => $hosts,
     erlang_cookie => $erlang,
     cluster_node_type => 'ram',
     wipe_db_on_cookie_change => true,
