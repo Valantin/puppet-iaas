@@ -9,23 +9,38 @@ class iaas::profile::keystone (
   $admin_interface = hiera('iaas::admin_interface', undef),
 
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
-) {
-  iaas::resources::database { 'keystone': }
 
-  include iaas::resources::connectors
+  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', 'guest'),
+  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', 'guest'),
+  $rabbitmq_hosts = hiera('iaas::profile::rabbitmq::hosts', '127.0.0.1'),
+  $rabbitmq_port = hiera('iaas::profile::rabbitmq::port', '5672'),
+  
+  $db_user = hiera('iaas::mysql::keystone::user', 'keystone'),
+  $db_password = hiera('iaas::mysql::keystone::password', undef),
+  $db_address = hiera('iaas::mysql::keystone::host', undef),
+
+  $public_address = undef,
+  $internal_address = undef,
+  $admin_address = undef,
+  $public_port = '5000',
+  $internal_port = '5000',
+  $admin_port = '35357',
+) {
+
   class { '::keystone':
     admin_token => $admin_token,
-    database_connection => $iaas::resources::connectors::keystone,
+    database_connection => "mysql://${db_user}:${db_password}@${db_address}/keystone",
     admin_bind_host => '0.0.0.0',
-    mysql_module => '2.3',
-    database_idle_timeout => 3,
+    rabbit_userid => $rabbitmq_user,
+    rabbit_password => $rabbitmq_password,
+    rabbit_hosts => $rabbitmq_hosts,
+    rabbit_port => $rabbitmq_port,
   }
 
   class { 'keystone::endpoint':
-    public_url => "http://${endpoint}:5000",
-    admin_url => "http://${endpoint}:35357",
-    internal_url => "http://${endpoint}:5000",
+    public_url => "http://${public_address}:${public_port}",
+    admin_url => "http://${admin_address}:${admin_port}",
+    internal_url => "http://${internal_address}:${internal_port}",
     region => $region,
   }
 
@@ -36,7 +51,7 @@ class iaas::profile::keystone (
     listening_service => 'keystone_admin_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${admin_interface}"],
-    ports => '35357',
+    ports => "${admin_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 
@@ -44,7 +59,7 @@ class iaas::profile::keystone (
     listening_service => 'keystone_public_internal_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => '5000',
+    ports => "${public_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 }
