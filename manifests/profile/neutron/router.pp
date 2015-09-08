@@ -9,9 +9,15 @@ class iaas::profile::neutron::router (
   $neutron_secret = hiera('iaas::profile::neutron::secret', undef),
 
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
 
   $mtu = 1438,
+
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
 ) {
   sysctl { 'net.ipv4.ip_forward': value => '1' }
   sysctl { 'net.ipv4.conf.all.rp_filter': value => '0' }
@@ -59,9 +65,9 @@ class iaas::profile::neutron::router (
   class { '::neutron::agents::metadata':
     auth_password => $neutron_password,
     shared_secret => $neutron_secret,
-    auth_url => "http://${endpoint}:5000/v2.0",
+    auth_url => "http://${admin_address}:${admin_port}/v2.0",
     auth_region => $region,
-    metadata_ip => $endpoint,
+    metadata_ip => $public_address,
     enabled => true,
   }
 
