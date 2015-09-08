@@ -3,19 +3,29 @@ class iaas::profile::ceilometer::common (
 
   $password = hiera('iaas::profile::ceilometer::password', undef),
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
-  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', undef),
-  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', undef),
+
+  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', 'guest'),
+  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', 'guest'),
+  $rabbitmq_hosts = hiera('iaas::profile::rabbitmq::hosts', '127.0.0.1'),
+  $rabbitmq_port = hiera('iaas::profile::rabbitmq::port', '5672'),
+
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
 ) {
   class { '::ceilometer':
     metering_secret => $secret,
-    rabbit_hosts => [ $endpoint ],
     rabbit_userid => $rabbitmq_user,
     rabbit_password => $rabbitmq_password,
+    rabbit_hosts => [$rabbitmq_hosts],
+    rabbit_port => $rabbitmq_port,
   }
 
   class { '::ceilometer::agent::auth':
-    auth_url => "http://${endpoint}:5000/v2.0",
+    auth_url => "http://${public_address}:${public_port}/v2.0",
     auth_password => $password,
     auth_region => $region,
   }
