@@ -5,38 +5,53 @@ class iaas::profile::cinder (
   $volume_size = undef,
 
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
-  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', undef),
-  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', undef),
+
+  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', 'guest'),
+  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', 'guest'),
+  $rabbitmq_hosts = hiera('iaas::profile::rabbitmq::hosts', '127.0.0.1'),
+  $rabbitmq_port = hiera('iaas::profile::rabbitmq::port', '5672'),
+
+  $db_user = hiera('iaas::mysql::cinder::user', 'cinder'),
+  $db_password = hiera('iaas::mysql::cinder::password', undef),
+  $db_address = hiera('iaas::mysql::cinder::host', undef),
+
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
+
+  $glance_api_port = hiera('iaas::profile::glance::api_port', '9292'),
+  $api_port = '8776',
 ) {
   include iaas::resources::connectors
   iaas::resources::database { 'cinder': }
 
   class { '::cinder':
-    database_connection => $iaas::resources::connectors::cinder,
-    rabbit_host => $endpoint,
+    database_connection => "mysql://${db_user}:${db_password}@${db_address}/cinder",
     rabbit_userid => $rabbitmq_user,
     rabbit_password => $rabbitmq_password,
-    mysql_module => '2.3',
-    database_idle_timeout => 3,
+    rabbit_hosts => $rabbitmq_hosts,
+    rabbit_port => $rabbitmq_port,
   }
 
   class { '::cinder::glance':
-    glance_api_servers => [ "${endpoint}:9292" ],
+    glance_api_servers => [ "${public_address}:${glance_api_port}" ],
   }
 
   class { '::cinder::keystone::auth':
     password => $password,
-    public_address => $endpoint,
-    admin_address => $endpoint,
-    internal_address => $endpoint,
+    public_address => $public_address,
+    admin_address => $admin_address,
+    internal_address => $internal_address,
     region => $region,
   }
 
   class { '::cinder::api':
     keystone_password => $password,
-    auth_uri => "http://${endpoint}:5000/v2.0",
-    identity_uri => "http://${endpoint}:35357",
+    auth_uri => "http://${public_address}:${public_port}/v2.0",
+    identity_uri => "http://${admin_address}:${admin_port}",
   }
 
   class { '::cinder::scheduler':
@@ -65,7 +80,7 @@ class iaas::profile::cinder (
     listening_service => 'cinder_api_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => '8776',
+    ports => "${api_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 }
