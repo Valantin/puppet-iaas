@@ -5,7 +5,13 @@ class iaas::profile::nova::compute (
   $cinder_secret = hiera('iaas::profile::cinder::secret', undef),
 
   $region = hiera('iaas::region', undef),
-  $endpoint = hiera('iaas::role::endpoint::main_address', undef),
+
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
 ) {
   include iaas::profile::nova::common
 
@@ -22,8 +28,8 @@ class iaas::profile::nova::compute (
     enabled => true,
     vnc_enabled => true,
     vncserver_proxyclient_address => $::facts["ipaddress_${admin_interface}"],
-    vncproxy_host => $endpoint,
-    vnc_keymap => 'fr',
+    vncproxy_host => $public_address,
+    vnc_keymap => 'it',
   }
 
   class { '::nova::compute::neutron': }
