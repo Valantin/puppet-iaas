@@ -5,37 +5,53 @@ class iaas::profile::heat (
 
   $region = hiera('iaas::region', undef),
   $endpoint = hiera('iaas::role::endpoint::main_address', undef),
-  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', undef),
-  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', undef),
+
+  $rabbitmq_user = hiera('iaas::profile::rabbitmq::user', 'guest'),
+  $rabbitmq_password = hiera('iaas::profile::rabbitmq::password', 'guest'),
+  $rabbitmq_hosts = hiera('iaas::profile::rabbitmq::hosts', '127.0.0.1'),
+  $rabbitmq_port = hiera('iaas::profile::rabbitmq::port', '5672'),
+  
+  $db_user = hiera('iaas::mysql::heat::user', 'heat'),
+  $db_password = hiera('iaas::mysql::heat::password', undef),
+  $db_address = hiera('iaas::mysql::heat::host', undef),
+
+
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
+
+  $heat_api = '8004',
+  $heat_api_cnf = '8000',
+  $heat_api_cw = '8003',
 ) {
-  include iaas::resources::connectors
-  iaas::resources::database { 'heat': }
 
   class { '::heat::keystone::auth':
     password => $password,
-    public_address => $endpoint,
-    admin_address => $endpoint,
-    internal_address => $endpoint,
+    public_address => $public_address,
+    admin_address => $admin_address,
+    internal_address => $internal_address,
     region => $region,
   }
   class { '::heat::keystone::auth_cfn':
     password => $password,
-    public_address => $endpoint,
-    admin_address => $endpoint,
-    internal_address => $endpoint,
+    public_address => $public_address,
+    admin_address => $admin_address,
+    internal_address => $internal_address,
     region => $region,
   }
 
   class { '::heat':
-    database_connection => $iaas::resources::connectors::heat,
-    rabbit_host => $endpoint,
+    database_connection => "mysql://${db_user}:${db_password}@${db_address}/heat",
     rabbit_userid => $rabbitmq_user,
     rabbit_password => $rabbitmq_password,
-    auth_uri => "http://${endpoint}:5000/v2.0",
-    identity_uri => "http://${endpoint}:35357",
+    rabbit_hosts => $rabbitmq_hosts,
+    rabbit_port => $rabbitmq_port,
+    auth_uri => "http://${public_address}:${public_port}/v2.0",
+    identity_uri => "http://${admin_address}:${admin_port}",
     keystone_password => $password,
-    mysql_module => '2.3',
-    database_idle_timeout => 3,
     region_name => $region,
   }
 
@@ -54,10 +70,8 @@ class iaas::profile::heat (
       source => "puppet:///modules/iaas/heat-keystone-setup-domain"
   } ->
   class { 'heat::keystone::domain':
-    auth_url => "http://${endpoint}:5000/v2.0",
-    keystone_admin => "heat",
+    auth_url => "http://${public_address}:${public_port}/v2.0",
     keystone_password => $password,
-    keystone_tenant   => "services",
     domain_name => 'heat',
     domain_admin => 'heat_admin',
     domain_password => 'heat_admin',
@@ -67,7 +81,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => '8004',
+    ports => "${heat_api}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 
@@ -75,7 +89,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cfn_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => '8000',
+    ports => "${heat_api_cfn}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 
@@ -83,7 +97,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cw_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => '8003',
+    ports => "${heat_api_cw}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 }
