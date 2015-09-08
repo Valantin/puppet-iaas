@@ -5,13 +5,21 @@ class iaas::profile::horizon (
   $endpoint_address = hiera('iaas::role::endpoint::main_address', undef),
   $endpoint_servers = hiera('iaas::role::endpoint::servers', undef),
   $fqdn = hiera('iaas::role::endpoint::main_hostname', undef),
+
+  
+  $public_address = hiera('iaas::profile::keystone::public_address', undef),
+  $internal_address = hiera('iaas::profile::keystone::internal_address', undef),
+  $admin_address = hiera('iaas::profile::keystone::admin_address', undef),
+  $public_port = hiera('iaas::profile::keystone::public_port', '5000'),
+  $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
+  $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
 ) {
   class { '::horizon':
     allowed_hosts => union([$fqdn, '127.0.0.1', $::facts["ipaddress_${public_interface}"]], $endpoint_servers),
     server_aliases => union([$fqdn, '127.0.0.1', $::facts["ipaddress_${public_interface}"]], $endpoint_servers),
     secret_key => $secret,
     cache_server_ip => $::facts["ipaddress_${admin_interface}"],
-    keystone_url => "http://${endpoint_address}:5000/v2.0",
+    keystone_url => "http://${public_address}:${public_port}/v2.0",
     cinder_options => {
       'enable_backup' => true,
     },
