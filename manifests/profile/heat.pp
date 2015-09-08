@@ -22,9 +22,9 @@ class iaas::profile::heat (
   $internal_port = hiera('iaas::profile::keystone::internal_port', '5000'),
   $admin_port = hiera('iaas::profile::keystone::admin_port', '35357'),
 
-  $heat_api = '8004',
-  $heat_api_cnf = '8000',
-  $heat_api_cw = '8003',
+  $api_port = '8004',
+  $api_cfn_port = '8000',
+  $api_cw_port = '8003',
 ) {
 
   class { '::heat::keystone::auth':
@@ -80,7 +80,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => "${heat_api}",
+    ports => "${api_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 
@@ -88,7 +88,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cfn_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => "${heat_api_cfn}",
+    ports => "${api_cfn_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 
@@ -96,7 +96,7 @@ class iaas::profile::heat (
     listening_service => 'heat_api_cw_cluster',
     server_names => $::hostname,
     ipaddresses => $::facts["ipaddress_${public_interface}"],
-    ports => "${heat_api_cw}",
+    ports => "${api_cw_port}",
     options => 'check inter 2000 rise 2 fall 5',
   }
 }
